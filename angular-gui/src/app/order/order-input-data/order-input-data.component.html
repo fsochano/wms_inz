@@ -1,0 +1,18 @@
+<mat-card class="order-detail-page">
+    <mat-card-content>
+        <form [formGroup]="form" class="order-detail-form">
+            <mat-form-field>
+                <input matInput type="text" placeholder="id" formControlName="id">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="text" placeholder="name" formControlName="name">
+            </mat-form-field>
+            <button mat-raised-button
+             color="primary" 
+             (click)="createOrder()"
+             [disabled]="!form.valid">
+                Create
+            </button>
+        </form>
+    </mat-card-content>
+</mat-card>

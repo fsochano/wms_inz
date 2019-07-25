@@ -1,0 +1,12 @@
+<button routerLink="/order" routerLinkActive="active">Back</button>
+<p>order-details works!</p>
+<p>Order id: {{ order.id }}</p>
+<p>Order name: {{ order.name }}</p>
+
+<ul>
+    <li *ngFor="let orderline of orderLines$ | async;">
+        <span>
+            {{ orderline.id }}
+        </span>
+    </li>
+</ul>

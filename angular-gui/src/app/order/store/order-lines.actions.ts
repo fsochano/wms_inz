@@ -1,0 +1,21 @@
+import { createAction, props } from '@ngrx/store';
+import { OrderLine } from './orders.model';
+
+class Actions {
+
+    readonly orderLinesLoaded = createAction(
+        '[Orders Lines Component] order lines loaded',
+        props<{ lines: OrderLine[] }>(),
+    );
+
+    readonly orderLineCreated = createAction(
+        '[Order Line Component] order line created',
+        props<{ line: OrderLine}>(),
+    );
+
+    readonly removeOrderLine = createAction(
+        '[Order Line component] remove order line',
+    );
+}
+
+export const OrderLinesActions = new Actions();
