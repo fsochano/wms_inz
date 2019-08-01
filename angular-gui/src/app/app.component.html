@@ -3,7 +3,7 @@
   <h1>
     Welcome {{ userName$ | async }}!
   </h1>
-  <button *ngIf="isUserLogged$ | async" routerLink="/login" routerLinkActive="active" (click)="logout()">Logout</button>
+  <button mat-raised-button color="accent" *ngIf="isUserLogged$ | async" routerLink="/login" routerLinkActive="active" (click)="logout()">Logout</button>
 </div>
 
 <router-outlet></router-outlet>

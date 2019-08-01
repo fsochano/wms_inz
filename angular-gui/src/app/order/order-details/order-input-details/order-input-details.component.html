@@ -1,0 +1,18 @@
+<mat-card class="details-page">
+    <mat-card-content>
+        <form [formGroup]="form" class="details-form">
+            <mat-form-field>
+                <input matInput type="number" placeholder="qty" formControlName="qty">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="text" placeholder="item" formControlName="item">
+            </mat-form-field>
+            <button mat-raised-button
+                color="primary" 
+                (click)="createOrderLine()"
+                [disabled]="!form.valid">
+                Create
+            </button>
+        </form>
+    </mat-card-content>
+</mat-card>

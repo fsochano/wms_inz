@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule, MatCardModule, MatButtonModule } from '@angular/material';
 import { authReducer } from './auth.readucer';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -16,6 +17,7 @@ import { authReducer } from './auth.readucer';
   exports: [LoginComponent],
   imports: [
     CommonModule,
+    HttpClientModule,
     ReactiveFormsModule,
     MatCardModule,
     MatInputModule,

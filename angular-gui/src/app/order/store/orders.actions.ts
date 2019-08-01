@@ -19,7 +19,7 @@ class Actions {
     );
     readonly removeOrder = createAction(
         '[Order component] remove order',
-        props<{ id: string }>(),
+        props<{ id: number }>(),
     );
 }
 

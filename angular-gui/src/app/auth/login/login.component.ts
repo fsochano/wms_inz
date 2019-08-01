@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { switchMap, tap } from 'rxjs/operators';
-import { from, noop } from 'rxjs';
+import { tap, first } from 'rxjs/operators';
+import { noop } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -23,21 +23,19 @@ export class LoginComponent {
     private router: Router,
     private store: Store<AppState>) {
     this.form = fb.group({
-      email: ['test@wms.com', [Validators.required]],
-      password: ['test', [Validators.required]]
+      email: ['user', [Validators.required]],
+      password: ['password', [Validators.required]]
     });
   }
 
   login() {
     const val = this.form.value;
     this.auth.login(val.email, val.password)
-      .pipe(
-        tap(user => {
+    .subscribe(
+        user => {
           this.store.dispatch(AuthActions.login({ user }));
           this.router.navigateByUrl('/order');
-        })
-      ).subscribe(
-        noop,
+        },
         () => alert('Login Failed'),
       );
   }

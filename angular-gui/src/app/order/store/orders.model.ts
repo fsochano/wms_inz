@@ -1,10 +1,10 @@
 export interface Order {
-    id: string;
+    id: number;
     name: string;
 }
 
 export interface OrderLine {
-    id: string;
+    id: number;
     qty: number;
     item: string;
 }

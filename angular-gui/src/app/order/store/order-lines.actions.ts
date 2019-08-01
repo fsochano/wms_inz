@@ -3,6 +3,11 @@ import { OrderLine } from './orders.model';
 
 class Actions {
 
+    readonly linesRequested = createAction(
+        '[Order Line component] order lines requested',
+        props<{ id: number }>(),
+    );
+
     readonly orderLinesLoaded = createAction(
         '[Orders Lines Component] order lines loaded',
         props<{ lines: OrderLine[] }>(),
@@ -10,12 +15,13 @@ class Actions {
 
     readonly orderLineCreated = createAction(
         '[Order Line Component] order line created',
-        props<{ line: OrderLine}>(),
+        props<{ line: OrderLine }>(),
     );
 
     readonly removeOrderLine = createAction(
         '[Order Line component] remove order line',
     );
+
 }
 
 export const OrderLinesActions = new Actions();

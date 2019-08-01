@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducer';
 import { OrdersService } from '../orders.service';
-import { tap } from 'rxjs/operators';
 import { OrdersActions } from '../store/orders.actions';
 
 @Component({
@@ -22,22 +21,20 @@ export class OrderInputDataComponent implements OnInit {
     private router: Router,
     private store: Store<AppState>) {
     this.form = fb.group({
-      id: ['1', [Validators.required]],
       name: ['name', [Validators.required]],
     });
   }
-  
-  ngOnInit() {
 
+  ngOnInit() {
   }
 
-  createOrder(){
+  createOrder() {
     const val = this.form.value;
-    this.ordersService.createOrder(val.id,val.name)
+    this.ordersService.createOrder(val.name)
     .subscribe(
       order => this.store.dispatch(OrdersActions.orderCreated({ order })),
       () => alert('order not created'),
-    )
+    );
   }
 
 }

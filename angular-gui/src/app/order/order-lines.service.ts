@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { OrderLine } from './store/orders.model';
+import { Dictionary } from '@ngrx/entity';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderLinesService {
 
-  constructor() { }
+  constructor(private readonly http: HttpClient) { }
 
-  loadOrderLines(id: string): Observable<OrderLine[]> {
-    return of([
-      { id: '1', qty: 5, item: 'doge' },
-    ]);
+  loadOrderLines(id: number): Observable<OrderLine[]> {
+    return this.http.get<OrderLine[]>(`/api/orders/${id}/orderlines`);
+  }
+
+  createOrderLine(orderId: number, params: { qty: number, item: string }): Observable<OrderLine> {
+    return this.http.post<OrderLine>(`/api/orders/${orderId}/orderlines`, params);
   }
 }

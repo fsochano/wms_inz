@@ -13,6 +13,11 @@ class Selectors {
         selectAll
     );
 
+    areLinesLoaded = createSelector(
+        this.feature,
+        state => state.isLoaded,
+    );
+
 }
 
 export const OrderLinesSelectors = new Selectors();

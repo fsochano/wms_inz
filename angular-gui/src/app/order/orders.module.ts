@@ -13,17 +13,23 @@ import { OrderInputDataComponent } from './order-input-data/order-input-data.com
 import { MatCardModule, MatInputModule, MatButtonModule } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OrderLinesReducers } from './store/order-lines.reducer';
+import { OrderInputDetailsComponent } from './order-details/order-input-details/order-input-details.component';
+import { OrderLinesEffects } from './store/order-lines.effects';
+import { AppMaterialModule } from '../app-material.module';
 
 
 
 @NgModule({
-  declarations: [OrderComponent, OrderDetailsComponent, OrderInputDataComponent],
+  declarations: [
+    OrderComponent,
+    OrderDetailsComponent,
+    OrderInputDataComponent,
+    OrderInputDetailsComponent,
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatCardModule,
-    MatInputModule,
-    MatButtonModule,
+    AppMaterialModule,
     RouterModule.forChild([
       {
         path: 'order',
@@ -41,7 +47,7 @@ import { OrderLinesReducers } from './store/order-lines.reducer';
     ]),
     StoreModule.forFeature('orderFeature', OrdersReducers),
     StoreModule.forFeature('orderLinesFeature', OrderLinesReducers),
-    EffectsModule.forFeature([OrdersEffects]),
+    EffectsModule.forFeature([OrdersEffects, OrderLinesEffects]),
   ]
 })
 export class OrderModule { }

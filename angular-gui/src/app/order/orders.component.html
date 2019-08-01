@@ -4,9 +4,9 @@
 <ul>
     <li *ngFor="let order of orders$ | async;">
         <span>
-            {{ order.id }}
+            {{ order.name }}
         </span>
-        <button [routerLink]="['/order',order.id]" routerLinkActive="active">Details</button>
-        <button (click)="removeOrder(order)">Remove</button>
+        <button mat-raised-button color="primary" [routerLink]="['/order',order.id]" routerLinkActive="active">Details</button>
+        <button mat-raised-button (click)="removeOrder(order)">Remove</button>
     </li>
 </ul>

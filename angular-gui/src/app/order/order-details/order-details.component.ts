@@ -28,7 +28,8 @@ export class OrderDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.order = this.route.snapshot.data.order;
-    this.orderLines$ = this.service.loadOrderLines(this.order.id);
+    this.orderLines$ = this.store.select(OrderLinesSelectors.selectAllOrderLines);
+    this.store.dispatch(OrderLinesActions.linesRequested({ id: this.order.id }));
   }
 
 }

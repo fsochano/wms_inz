@@ -8,7 +8,7 @@ export class AuthEffects implements OnInitEffects {
     save$ = createEffect(() =>
         this.actions$.pipe(
             ofType(AuthActions.login),
-            tap(({ user }) =>  localStorage.setItem('user', JSON.stringify(user)))
+            tap((state) =>  localStorage.setItem('authState', JSON.stringify(state)))
         ),
         { dispatch: false }
     );
@@ -16,7 +16,7 @@ export class AuthEffects implements OnInitEffects {
     clear$ = createEffect(() =>
         this.actions$.pipe(
             ofType(AuthActions.logout),
-            tap(() => localStorage.removeItem('user'))
+            tap(() => localStorage.removeItem('authState'))
         ),
         { dispatch: false, }
     );
@@ -27,9 +27,9 @@ export class AuthEffects implements OnInitEffects {
 
 
     ngrxOnInitEffects(): Action {
-        const userData = localStorage.getItem('user');
+        const userData = localStorage.getItem('authState');
         if (userData) {
-            return AuthActions.login({ user: JSON.parse(userData) });
+            return AuthActions.login(JSON.parse(userData));
         } else {
             return AuthActions.logout();
         }
