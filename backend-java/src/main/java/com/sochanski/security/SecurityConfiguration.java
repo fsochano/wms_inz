@@ -34,15 +34,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf()
-                    .disable()
-                .authorizeRequests()
-                    .antMatchers("/api/login").permitAll()
-                    .anyRequest().authenticated()
-                .and()
-                    .httpBasic()
-                .and()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .headers().frameOptions().disable().and()
+            .csrf()
+                .disable()
+            .authorizeRequests()
+                .antMatchers("/api/login").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
+                .anyRequest().authenticated()
+            .and()
+                .httpBasic()
+            .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override

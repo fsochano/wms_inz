@@ -14,7 +14,7 @@ public class Order {
     public String name;
 
     @JsonIgnore
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     public List<OrderLine> orderLines;
 
     public Order(String name, List<OrderLine> orderLines) {
