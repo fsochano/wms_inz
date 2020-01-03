@@ -18,8 +18,9 @@ class Actions {
         props<{ line: OrderLine }>(),
     );
 
-    readonly removeOrderLine = createAction(
+    readonly orderLineRemoved = createAction(
         '[Order Line component] remove order line',
+        props<{ id: number }>(),
     );
 
 }

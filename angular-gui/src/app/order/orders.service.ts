@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Order } from './store/orders.model';
+import { Order, OrderStatus } from './store/orders.model';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -24,5 +24,9 @@ export class OrdersService {
 
   removeOrder(id: number): Observable<any> {
     return this.http.delete<void>(`/api/orders/${id}`);
+  }
+
+  updateOrderStatus(id: number, status: OrderStatus): Observable<Order> {
+    return this.http.post<Order>(`/api/orders/${id}`, { status });
   }
 }

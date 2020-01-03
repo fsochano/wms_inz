@@ -11,11 +11,15 @@ export class OrderLinesService {
 
   constructor(private readonly http: HttpClient) { }
 
-  loadOrderLines(id: number): Observable<OrderLine[]> {
-    return this.http.get<OrderLine[]>(`/api/orders/${id}/orderlines`);
+  loadOrderLines(orderId: number): Observable<OrderLine[]> {
+    return this.http.get<OrderLine[]>(`/api/orders/${orderId}/orderlines`);
   }
 
   createOrderLine(orderId: number, params: { qty: number, item: string }): Observable<OrderLine> {
     return this.http.post<OrderLine>(`/api/orders/${orderId}/orderlines`, params);
+  }
+
+  removeOrderLine(orderId: number, orderLineId: number) {
+    return this.http.delete<void>(`/api/orders/${orderId}/orderlines/${orderLineId}`);
   }
 }

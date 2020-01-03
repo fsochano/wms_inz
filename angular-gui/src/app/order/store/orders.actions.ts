@@ -13,14 +13,22 @@ class Actions {
         '[Order component] order created',
         props<{ order: Order}>(),
     );
+    readonly loadOrder = createAction(
+        '[Order component] load order',
+        props<{ id: number }>(),
+    );
     readonly orderLoaded = createAction(
         '[Order component] order loaded',
         props<{ order: Order }>(),
     );
-    readonly removeOrder = createAction(
-        '[Order component] remove order',
+    readonly orderRemoved = createAction(
+        '[Order component] order removed',
         props<{ id: number }>(),
     );
+    readonly orderReleased = createAction(
+        '[Order component] order released',
+        props<{ id: number }>(),
+    )
 }
 
 export const OrdersActions = new Actions();

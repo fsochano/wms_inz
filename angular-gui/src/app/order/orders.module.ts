@@ -16,6 +16,7 @@ import { OrderLinesReducers } from './store/order-lines.reducer';
 import { OrderInputDetailsComponent } from './order-details/order-input-details/order-input-details.component';
 import { OrderLinesEffects } from './store/order-lines.effects';
 import { AppMaterialModule } from '../app-material.module';
+import { OrderLineDetailsComponent } from './order-details/order-line-details/order-line-details.component';
 
 
 
@@ -25,6 +26,7 @@ import { AppMaterialModule } from '../app-material.module';
     OrderDetailsComponent,
     OrderInputDataComponent,
     OrderInputDetailsComponent,
+    OrderLineDetailsComponent,
   ],
   imports: [
     CommonModule,

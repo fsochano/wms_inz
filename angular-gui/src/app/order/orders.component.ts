@@ -34,7 +34,7 @@ export class OrderComponent implements OnInit {
 
   removeOrder({ id }: Order) {
     this.service.removeOrder(id).subscribe(
-      () => this.store.dispatch(OrdersActions.removeOrder({ id }))
+      () => this.store.dispatch(OrdersActions.orderRemoved({ id }))
     );
   }
 }

@@ -22,16 +22,7 @@ export class OrderResolver implements Resolve<Order> {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Observable<Order> {
-        return this.store.select(OrdersSelectors.selectOrder(route.params.orderId))
-            .pipe(
-                switchMap(order => {
-                    if (order) {
-                        return of(order);
-                    } else {
-                        return this.service.loadOrder(route.params.orderId);
-                    }
-                }),
-                first(),
-            );
+        this.store.dispatch(OrdersActions.loadOrder({ id: route.params.orderId }))
+        return this.store.select(OrdersSelectors.selectOrder(route.params.orderId)).pipe(first());
     }
 }

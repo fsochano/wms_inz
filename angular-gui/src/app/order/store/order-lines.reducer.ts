@@ -22,5 +22,7 @@ export const OrderLinesReducers = createReducer(
     on(OrderLinesActions.orderLinesLoaded,
         (state, { lines }) => OrderLinesAdapter.addAll(lines, { ...state, isLoaded: true })),
     on(OrderLinesActions.orderLineCreated,
-        (state, { line }) => OrderLinesAdapter.addOne(line, state))
+        (state, { line }) => OrderLinesAdapter.addOne(line, state)),
+    on(OrderLinesActions.orderLineRemoved,
+        (state, { id }) => OrderLinesAdapter.removeOne(id, state))
 );

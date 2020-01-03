@@ -1,6 +1,13 @@
+export enum OrderStatus {
+    HOLD = "HOLD",
+    RELEASED = "RELEASED",
+    PICKED = "PICKED",
+}
+
 export interface Order {
     id: number;
     name: string;
+    status: OrderStatus;
 }
 
 export interface OrderLine {

@@ -17,6 +17,15 @@ export class OrdersEffects {
         )
     );
 
+    loadOrder$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(OrdersActions.loadOrder),
+            withLatestFrom(this.store.select(OrdersSelectors.selectOrdersMap)),
+            filter(([{ id }, orderMap]) => orderMap[id] === undefined),
+            switchMap(([{ id }]) => this.ordersService.loadOrder(id)),
+            map(order => OrdersActions.orderLoaded({ order })),
+        ))
+
     constructor(
         private actions$: Actions,
         private ordersService: OrdersService,
