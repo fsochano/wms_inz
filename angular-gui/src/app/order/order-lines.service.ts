@@ -12,14 +12,14 @@ export class OrderLinesService {
   constructor(private readonly http: HttpClient) { }
 
   loadOrderLines(orderId: number): Observable<OrderLine[]> {
-    return this.http.get<OrderLine[]>(`/api/orders/${orderId}/orderlines`);
+    return this.http.get<OrderLine[]>(`/api/orders/${orderId}/order-lines`);
   }
 
   createOrderLine(orderId: number, params: { qty: number, item: string }): Observable<OrderLine> {
-    return this.http.post<OrderLine>(`/api/orders/${orderId}/orderlines`, params);
+    return this.http.post<OrderLine>(`/api/orders/${orderId}/order-lines`, params);
   }
 
   removeOrderLine(orderId: number, orderLineId: number) {
-    return this.http.delete<void>(`/api/orders/${orderId}/orderlines/${orderLineId}`);
+    return this.http.delete<void>(`/api/orders/${orderId}/order-lines/${orderLineId}`);
   }
 }

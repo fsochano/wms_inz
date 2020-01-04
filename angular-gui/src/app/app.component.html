@@ -1,9 +1,13 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome {{ userName$ | async }}!
-  </h1>
-  <button mat-raised-button color="accent" *ngIf="isUserLogged$ | async" routerLink="/login" routerLinkActive="active" (click)="logout()">Logout</button>
-</div>
-
+<mat-toolbar color="primary" *ngIf="isUserLogged$ | async">
+  <mat-toolbar-row>
+    <span>Welcome {{ userName$ | async }}!</span>
+    <span class="spacer"></span>
+    <button mat-raised-button
+      routerLink="/login"
+      routerLinkActive="active"
+      (click)="logout()">
+      Logout
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
 <router-outlet></router-outlet>

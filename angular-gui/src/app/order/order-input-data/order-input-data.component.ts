@@ -18,7 +18,6 @@ export class OrderInputDataComponent implements OnInit {
   constructor(
     fb: FormBuilder,
     private ordersService: OrdersService,
-    private router: Router,
     private store: Store<AppState>) {
     this.form = fb.group({
       name: ['name', [Validators.required]],

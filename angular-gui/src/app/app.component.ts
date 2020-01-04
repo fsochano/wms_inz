@@ -4,8 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { AppState } from './app.reducer';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, startWith, filter } from 'rxjs/operators';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +12,8 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
 
-  userName$: Observable<string>;
-  isUserLogged$: Observable<boolean>;
+  userName$: Observable<string> = this.store.select(AuthSelectors.userName);
+  isUserLogged$: Observable<boolean> = this.store.select(AuthSelectors.isLoggedIn);
 
   constructor(
     private store: Store<AppState>
@@ -23,8 +21,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userName$ = this.store.select(AuthSelectors.userName);
-    this.isUserLogged$ = this.store.select(AuthSelectors.isLoggedIn);
   }
 
   logout() {

@@ -1,0 +1,14 @@
+.side-nav {
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  margin: 4px;
+
+  * {
+    margin: 4px 0;
+  }
+}
+
+mat-sidenav-content {
+  height: 300px;
+}

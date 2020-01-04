@@ -2,8 +2,8 @@ import { Order } from './orders.model';
 import { createAction, props } from '@ngrx/store';
 
 class Actions {
-    readonly loadOrders = createAction(
-        '[Order component] load orders',
+    readonly ordersRequested = createAction(
+        '[Order component] orders Requested',
     );
     readonly ordersLoaded = createAction(
         '[Orders Component] orders loaded',
@@ -13,8 +13,8 @@ class Actions {
         '[Order component] order created',
         props<{ order: Order}>(),
     );
-    readonly loadOrder = createAction(
-        '[Order component] load order',
+    readonly orderRequested = createAction(
+        '[Order component] order requested',
         props<{ id: number }>(),
     );
     readonly orderLoaded = createAction(
@@ -28,7 +28,7 @@ class Actions {
     readonly orderReleased = createAction(
         '[Order component] order released',
         props<{ id: number }>(),
-    )
+    );
 }
 
 export const OrdersActions = new Actions();

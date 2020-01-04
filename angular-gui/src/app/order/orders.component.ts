@@ -17,8 +17,8 @@ import { OrdersSelectors } from './store/orders.selector';
 })
 export class OrderComponent implements OnInit {
 
-  orders$: Observable<Order[]>;
-  user$: Observable<string>;
+  orders$: Observable<Order[]> = this.store.select(OrdersSelectors.selectAllOrders);
+  user$: Observable<string> = this.store.select(AuthSelectors.userName);
 
   constructor(
     private readonly store: Store<AppState>,
@@ -26,10 +26,7 @@ export class OrderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.orders$ = this.store.select(OrdersSelectors.selectAllOrders);
-    this.user$ = this.store.select(AuthSelectors.userName);
-
-    this.store.dispatch(OrdersActions.loadOrders());
+    this.store.dispatch(OrdersActions.ordersRequested());
   }
 
   removeOrder({ id }: Order) {

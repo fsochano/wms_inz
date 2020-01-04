@@ -1,7 +1,7 @@
 export enum OrderStatus {
-    HOLD = "HOLD",
-    RELEASED = "RELEASED",
-    PICKED = "PICKED",
+    HOLD = 'HOLD',
+    RELEASED = 'RELEASED',
+    PICKED = 'PICKED',
 }
 
 export interface Order {

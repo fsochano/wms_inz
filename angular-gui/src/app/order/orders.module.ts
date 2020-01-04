@@ -8,17 +8,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { OrdersEffects } from './store/orders.effects';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from '../auth/auth.guard';
-import { OrderResolver } from './orders.resolver';
 import { OrderInputDataComponent } from './order-input-data/order-input-data.component';
-import { MatCardModule, MatInputModule, MatButtonModule } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OrderLinesReducers } from './store/order-lines.reducer';
 import { OrderInputDetailsComponent } from './order-details/order-input-details/order-input-details.component';
 import { OrderLinesEffects } from './store/order-lines.effects';
 import { AppMaterialModule } from '../app-material.module';
 import { OrderLineDetailsComponent } from './order-details/order-line-details/order-line-details.component';
-
-
 
 @NgModule({
   declarations: [
@@ -42,9 +38,6 @@ import { OrderLineDetailsComponent } from './order-details/order-line-details/or
         path: 'order/:orderId',
         component: OrderDetailsComponent,
         canActivate: [AuthGuard],
-        resolve: {
-          order: OrderResolver,
-        },
       },
     ]),
     StoreModule.forFeature('orderFeature', OrdersReducers),

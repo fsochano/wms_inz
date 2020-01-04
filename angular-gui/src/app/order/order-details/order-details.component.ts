@@ -19,26 +19,38 @@ import { OrdersSelectors } from '../store/orders.selector';
 })
 export class OrderDetailsComponent implements OnInit {
 
-  order$: Observable<Order>; 
+  order$: Observable<Order> = this.store.select(OrdersSelectors.selectOrder(this.route.snapshot.params.orderId));
   orderLines$: Observable<OrderLine[]> = this.store.select(OrderLinesSelectors.selectAllOrderLines);
+
 
   constructor(
     private route: ActivatedRoute,
     private store: Store<AppState>,
     private service: OrdersService,
+    private orderLineService: OrderLinesService,
   ) { }
 
   ngOnInit() {
-    this.order$ = this.store.select(OrdersSelectors.selectOrder(this.route.snapshot.params.orderId))
-    this.store.dispatch(OrderLinesActions.linesRequested({ id: this.route.snapshot.params.orderId }));
+    this.store.dispatch(OrdersActions.orderRequested({ id: this.orderId }));
+    this.store.dispatch(OrderLinesActions.linesRequested({ id: this.orderId }));
   }
 
   releaseOrder() {
-    this.service.updateOrderStatus(this.route.snapshot.params.orderId, OrderStatus.RELEASED).subscribe(
-      order => {
-        this.store.dispatch(OrdersActions.orderReleased({ id: order.id }));
-      }
+    this.service.updateOrderStatus(this.orderId, OrderStatus.RELEASED)
+      .subscribe(
+        ({ id }) => this.store.dispatch(OrdersActions.orderReleased({ id }))
+      );
+  }
+
+  removeOrderLine({ id }: OrderLine) {
+    this.orderLineService.removeOrderLine(this.orderId, id)
+    .subscribe(
+      () => this.store.dispatch(OrderLinesActions.orderLineRemoved({ id }))
     );
+  }
+
+  get orderId() {
+    return this.route.snapshot.params.orderId;
   }
 
 }

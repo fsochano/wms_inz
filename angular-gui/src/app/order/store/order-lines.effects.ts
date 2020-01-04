@@ -1,18 +1,15 @@
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { OrderLinesActions } from './order-lines.actions';
-import { withLatestFrom, filter, switchMap, map, tap } from 'rxjs/operators';
-import { OrderLinesSelectors } from './order-lines.selector';
+import { switchMap, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.reducer';
+import { AppState } from '../../app.reducer';
+import { OrderLinesActions } from './order-lines.actions';
 import { OrderLinesService } from '../order-lines.service';
 
 export class OrderLinesEffects {
     loadOrderLines$ = createEffect(() =>
         this.actions$.pipe(
             ofType(OrderLinesActions.linesRequested),
-            withLatestFrom(this.store.select(OrderLinesSelectors.areLinesLoaded)),
-            filter(([, loaded]) => !loaded),
-            switchMap(([{id}]) => this.service.loadOrderLines(id)),
+            switchMap(({ id }) => this.service.loadOrderLines(id)),
             map(lines => OrderLinesActions.orderLinesLoaded({ lines })),
         )
     );

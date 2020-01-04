@@ -45,3 +45,10 @@ $theme: mat-light-theme($primary, $accent);
 
 // Include all theme styles for the components.
 @include angular-material-theme($theme);
+
+// Include all icons
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+.spacer {
+  flex: 1 1 auto;
+}
