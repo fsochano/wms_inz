@@ -1,0 +1,15 @@
+<form [formGroup]="form" class="details-form">
+    <mat-form-field>
+        <input matInput type="text" placeholder="name" formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput type="text" placeholder="description" formControlName="description">
+    </mat-form-field>
+    <span class="spacer"></span>
+    <button mat-raised-button
+        color="primary"
+        (click)="createSku()"
+        [disabled]="!form.valid">
+        Create
+    </button>
+</form>

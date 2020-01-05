@@ -15,6 +15,7 @@ import { OrderInputDetailsComponent } from './order-details/order-input-details/
 import { OrderLinesEffects } from './store/order-lines.effects';
 import { AppMaterialModule } from '../app-material.module';
 import { OrderLineDetailsComponent } from './order-details/order-line-details/order-line-details.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { OrderLineDetailsComponent } from './order-details/order-line-details/or
     CommonModule,
     ReactiveFormsModule,
     AppMaterialModule,
+    SharedModule,
     RouterModule.forChild([
       {
         path: 'order',

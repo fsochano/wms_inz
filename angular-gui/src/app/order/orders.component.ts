@@ -26,6 +26,8 @@ export class OrderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // this.service.loadOrders()
+    // .subscribe(orders => this.store.dispatch(OrdersActions.ordersLoaded({ orders })));
     this.store.dispatch(OrdersActions.ordersRequested());
   }
 

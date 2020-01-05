@@ -1,13 +1,32 @@
-<mat-toolbar color="primary" *ngIf="isUserLogged$ | async">
-  <mat-toolbar-row>
-    <span>Welcome {{ userName$ | async }}!</span>
-    <span class="spacer"></span>
-    <button mat-raised-button
-      routerLink="/login"
-      routerLinkActive="active"
-      (click)="logout()">
-      Logout
-    </button>
-  </mat-toolbar-row>
-</mat-toolbar>
-<router-outlet></router-outlet>
+<div class="main">
+  <app-header-layout>
+
+    <mat-toolbar header color="primary" *ngIf="isUserLogged$ | async">
+      <mat-toolbar-row>
+        <span class="header-message">Welcome {{ userName$ | async }}!</span>
+        <nav mat-tab-nav-bar backgroundColor="primary">
+          <a mat-tab-link
+            routerLink="/order"
+            routerLinkActive="active"
+            #ordersLinkActive="routerLinkActive"
+            [active]="ordersLinkActive.isActive">Orders</a>
+          <a mat-tab-link
+            routerLink="/sku"
+            routerLinkActive="active"
+            #skuLinkActive="routerLinkActive"
+            [active]="skuLinkActive.isActive">SKU</a>
+        </nav>
+        <span class="spacer"></span>
+        <button mat-raised-button
+          routerLink="/login"
+          routerLinkActive="active"
+          (click)="logout()">
+          Logout
+        </button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  
+    <router-outlet content></router-outlet>
+  
+  </app-header-layout>
+</div>

@@ -15,4 +15,3 @@ export interface OrderLine {
     qty: number;
     item: string;
 }
-

@@ -1,0 +1,24 @@
+<app-header-layout>
+  <h1 header>SKU'S</h1>
+  <mat-sidenav-container content>
+    <mat-sidenav mode="side" opened>
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Create SKU</mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-sku-input-data></app-sku-input-data>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <mat-list>
+          <mat-list-item *ngFor="let sku of skus$ | async;">
+              <span>{{ sku.id }}</span>
+              <span>{{ sku.name }}</span>
+              <span>{{ sku.description }}</span>
+          </mat-list-item>
+        </mat-list>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</app-header-layout>

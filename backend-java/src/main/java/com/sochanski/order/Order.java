@@ -10,7 +10,9 @@ import java.util.List;
 @Table(name = "order_header")
 public class Order {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="order_header_id_gen")
+    @SequenceGenerator(name="order_header_id_gen", sequenceName="order_header_id_gen", allocationSize=1)
     public long id;
     public String name;
     public OrderStatus status;

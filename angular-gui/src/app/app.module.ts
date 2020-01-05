@@ -10,10 +10,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { OrderModule } from './order/orders.module';
 import { LocationComponent } from './location/location.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppMaterialModule } from './app-material.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth-interceptor';
+import { SkuModule } from './sku/sku.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -22,10 +24,12 @@ import { AuthInterceptor } from './auth/auth-interceptor';
   ],
   imports: [
     AppMaterialModule,
+    SharedModule,
     OrderModule,
+    SkuModule,
     AuthModule,
     BrowserModule,
-    NoopAnimationsModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     StoreModule.forRoot({}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],

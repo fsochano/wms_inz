@@ -48,6 +48,9 @@ public class OrdersController {
     public Order updateOrder(@PathVariable long id, @RequestBody OrderUpdateParams orderUpdateParams) {
         return orderRepository.findById(id)
                 .map(order -> {
+//                    if(order.status != OrderStatus.HOLD) {
+//                        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+//                    }
                     orderUpdateParams.name.ifPresent(a -> order.name = a);
                     orderUpdateParams.status.ifPresent(a -> order.status = a);
                     return order;
@@ -57,8 +60,11 @@ public class OrdersController {
 
     @DeleteMapping(path = "orders/{id}")
     public void deleteOrder(@PathVariable long id) {
-        orderRepository.findById(id)
+        Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        if(order.status != OrderStatus.HOLD) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         orderRepository.deleteById(id);
     }
 
@@ -73,6 +79,9 @@ public class OrdersController {
     public OrderLine createOrderLine(@PathVariable long orderId, @RequestBody OrderLineParameters orderLineParameters) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        if(order.status != OrderStatus.HOLD) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         if (orderLineParameters.qty <= 0 || Strings.isNullOrEmpty(orderLineParameters.item)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong request body");
         }
@@ -87,6 +96,10 @@ public class OrdersController {
     public void deleteOrderLine(@PathVariable long orderId, @PathVariable long orderLineId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(order.status != OrderStatus.HOLD) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
 
         if(order.orderLines.removeIf(orderLine -> orderLine.id == orderLineId)) {
             orderRepository.save(order);
