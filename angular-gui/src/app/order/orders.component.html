@@ -14,8 +14,8 @@
     <mat-sidenav-content>
       <mat-list>
         <mat-list-item *ngFor="let order of orders$ | async;">
-          <span>{{ order.name }}</span>
-          <span>{{ order.status }}</span>
+          <span>Order Name:{{ order.name }}&nbsp;</span>
+          <span>Status:{{ order.status }}&nbsp;</span>
           <span class="spacer"></span>
           <button mat-raised-button
             color="primary"

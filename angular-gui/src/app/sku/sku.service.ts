@@ -9,12 +9,12 @@ export class SkuService {
 
   skus = [{
     id: 1,
-    name: 'asd',
-    description: 'dsa',
+    name: 'Wędka',
+    description: 'Opis tejże wędki',
   },{
     id: 2,
-    name: 'dsa',
-    description: 'asd',
+    name: 'Haczyk',
+    description: 'Opis haczyków',
   }];
 
   constructor() { }

@@ -9,9 +9,9 @@
             <button header mat-raised-button routerLink="/order" routerLinkActive="active">Back</button>
             <div content class="side-nav">
               <h3>Order details</h3>
-              <p>Order id: {{ (order$| async)?.id }}</p>
-              <p>Order name: {{ (order$| async)?.name }}</p>
-              <p>Order status: {{ (order$| async)?.status }}</p>
+              <p>Order id:{{ (order$| async)?.id }} </p>
+              <p>Order name:{{ (order$| async)?.name }} </p>
+              <p>Order status:{{ (order$| async)?.status }} </p>
               <button mat-raised-button (click)="releaseOrder()">Release</button>
               <mat-accordion>
                 <mat-expansion-panel>
