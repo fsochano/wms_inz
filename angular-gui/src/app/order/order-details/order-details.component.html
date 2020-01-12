@@ -1,37 +1,25 @@
+<app-layout>
+  <h1 header>Order {{ orderName$ | async }}</h1>
 
-<app-header-layout>
-  <h1 header>Order {{ (order$| async)?.name }}</h1>
 
-  <mat-sidenav-container content>
+  <div sidenav class="side-nav">
+    <button mat-raised-button routerLink="/order" routerLinkActive="active">Back</button>
+    <app-order-properties [order]="order$ | async"></app-order-properties>
+    <button mat-raised-button (click)="releaseOrder()">Release</button>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Create order line</mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-order-input-details [order]="order$| async"></app-order-input-details>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
 
-    <mat-sidenav mode="side" opened>
-        <app-header-layout>
-            <button header mat-raised-button routerLink="/order" routerLinkActive="active">Back</button>
-            <div content class="side-nav">
-              <h3>Order details</h3>
-              <p>Order id:{{ (order$| async)?.id }} </p>
-              <p>Order name:{{ (order$| async)?.name }} </p>
-              <p>Order status:{{ (order$| async)?.status }} </p>
-              <button mat-raised-button (click)="releaseOrder()">Release</button>
-              <mat-accordion>
-                <mat-expansion-panel>
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>Create order line</mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <app-order-input-details [orderId]="(order$| async)?.id"></app-order-input-details>
-                </mat-expansion-panel>
-              </mat-accordion>
-            </div>
-        </app-header-layout>
-    </mat-sidenav>
-  
-    <mat-sidenav-content>
-      <mat-list>
-        <mat-list-item *ngFor="let orderLine of orderLines$ | async;">
-            <app-order-line-details [orderLine]="orderLine" (remove)="removeOrderLine($event)"></app-order-line-details>
-        </mat-list-item>
-      </mat-list>
-    </mat-sidenav-content>
-  
-  </mat-sidenav-container>
-</app-header-layout>
+  <mat-list content>
+    <mat-list-item *ngFor="let orderLine of orderLines$ | async;">
+      <app-order-line-details [orderLine]="orderLine" (remove)="removeOrderLine($event)"></app-order-line-details>
+    </mat-list-item>
+  </mat-list>
+
+</app-layout>

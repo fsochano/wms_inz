@@ -1,8 +1,7 @@
-package com.sochanski.order;
+package com.sochanski.order.data;
 
 import java.util.Optional;
 
 public class OrderUpdateParams {
     public Optional<String> name = Optional.empty();
-    public Optional<OrderStatus> status = Optional.empty();
 }

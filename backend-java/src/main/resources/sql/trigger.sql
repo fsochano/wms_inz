@@ -6,7 +6,7 @@ BEGIN
     IF(:old.STATUS <> '0') THEN
         RAISE_APPLICATION_ERROR (
         num => -20111,
-        msg => 'Credit Limit Exceeded');
+        msg => 'Can not change the status');
     END IF;
 END;
 /

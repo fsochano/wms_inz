@@ -2,4 +2,11 @@
   height: 98vh;
   width: 98vw;
   margin: 1vh 1vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
 }

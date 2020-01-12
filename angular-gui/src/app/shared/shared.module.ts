@@ -1,14 +1,21 @@
+import { AppMaterialModule } from './app-material.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderLayoutComponent } from './header-layout/header-layout.component';
-
+import { LayoutComponent } from './layout/layout.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
-  declarations: [HeaderLayoutComponent],
-  exports: [HeaderLayoutComponent],
+  declarations: [LayoutComponent],
+  exports: [
+    LayoutComponent,
+    AppMaterialModule,
+    ReactiveFormsModule,
+  ],
   imports: [
-    CommonModule
+    CommonModule,
+    AppMaterialModule,
+    ReactiveFormsModule,
   ]
 })
 export class SharedModule { }

@@ -12,6 +12,11 @@ class Actions{
         '[Sku component] Sku Created',
         props<{ sku: Sku }>(),
     );
+
+    readonly skuRemoved = createAction(
+        '[Sku component] Sku Removed',
+        props<{ sku: Sku }>(),
+    );
 }
 
 export const SkusActions = new Actions();

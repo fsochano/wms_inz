@@ -13,9 +13,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { OrderLinesReducers } from './store/order-lines.reducer';
 import { OrderInputDetailsComponent } from './order-details/order-input-details/order-input-details.component';
 import { OrderLinesEffects } from './store/order-lines.effects';
-import { AppMaterialModule } from '../app-material.module';
 import { OrderLineDetailsComponent } from './order-details/order-line-details/order-line-details.component';
 import { SharedModule } from '../shared/shared.module';
+import { OrderPropertiesComponent } from './order-details/order-properties/order-properties.component';
 
 @NgModule({
   declarations: [
@@ -24,11 +24,10 @@ import { SharedModule } from '../shared/shared.module';
     OrderInputDataComponent,
     OrderInputDetailsComponent,
     OrderLineDetailsComponent,
+    OrderPropertiesComponent,
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    AppMaterialModule,
     SharedModule,
     RouterModule.forChild([
       {

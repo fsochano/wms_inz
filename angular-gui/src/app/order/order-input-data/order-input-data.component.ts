@@ -20,7 +20,7 @@ export class OrderInputDataComponent implements OnInit {
     private ordersService: OrdersService,
     private store: Store<AppState>) {
     this.form = fb.group({
-      name: ['name', [Validators.required]],
+      name: [null, [Validators.required]],
     });
   }
 

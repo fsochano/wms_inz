@@ -1,1 +1,24 @@
-<p>location works!</p>
+<app-layout>
+
+    <h1 header>Locations</h1>
+
+    <mat-accordion sidenav>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>Create Location</mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- <app-location-input-data></app-location-input-data> -->
+        </mat-expansion-panel>
+    </mat-accordion>
+
+    <table mat-table content [dataSource]="locations$ | async">
+        <ng-container [matColumnDef]="column.param" *ngFor="let column of columnSchema">
+            <th mat-header-cell *matHeaderCellDef> {{ column.name }} </th>
+            <td mat-cell *matCellDef="let element"> {{ element[column.param] }} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+</app-layout>

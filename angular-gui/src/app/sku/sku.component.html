@@ -1,8 +1,8 @@
-<app-header-layout>
+<app-layout>
+
   <h1 header>SKU'S</h1>
-  <mat-sidenav-container content>
-    <mat-sidenav mode="side" opened>
-      <mat-accordion>
+
+      <mat-accordion sidenav>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>Create SKU</mat-panel-title>
@@ -10,15 +10,20 @@
           <app-sku-input-data></app-sku-input-data>
         </mat-expansion-panel>
       </mat-accordion>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <mat-list>
-          <mat-list-item *ngFor="let sku of skus$ | async;">
-              <span>{{ sku.id }}&nbsp;</span>
-              <span>{{ sku.name }}&nbsp;</span>
-              <span>{{ sku.description }}&nbsp;</span>
-          </mat-list-item>
-        </mat-list>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</app-header-layout>
+      
+      <mat-list content>
+        <mat-list-item *ngFor="let sku of skus$ | async;">
+          <span>{{ sku.id }}&nbsp;</span>
+          <span>{{ sku.name }}&nbsp;</span>
+          <span>{{ sku.description }}&nbsp;</span>
+          <span class="spacer"></span>
+          <button mat-raised-button color="primary" [routerLink]="['/sku', sku.id]" routerLinkActive="active">
+            Details
+          </button>
+          <button mat-raised-button (click)="removeSku(sku)">
+            Remove
+          </button>
+        </mat-list-item>
+      </mat-list>
+
+</app-layout>

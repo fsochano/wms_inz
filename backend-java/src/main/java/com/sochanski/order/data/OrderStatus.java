@@ -1,4 +1,4 @@
-package com.sochanski.order;
+package com.sochanski.order.data;
 
 public enum OrderStatus {
     HOLD,

@@ -1,3 +1,5 @@
+import { Sku } from '../../sku/store/sku.model';
+
 export enum OrderStatus {
     HOLD = 'HOLD',
     RELEASED = 'RELEASED',
@@ -13,5 +15,5 @@ export interface Order {
 export interface OrderLine {
     id: number;
     qty: number;
-    item: string;
+    sku: Sku;
 }

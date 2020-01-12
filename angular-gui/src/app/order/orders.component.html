@@ -1,34 +1,43 @@
-<app-header-layout>
+<app-layout>
+
   <h1 header>Orders</h1>
-  <mat-sidenav-container content>
-    <mat-sidenav mode="side" opened>
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>Create order</mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-order-input-data></app-order-input-data>
-        </mat-expansion-panel>
-      </mat-accordion>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <mat-list>
-        <mat-list-item *ngFor="let order of orders$ | async;">
-          <span>Order Name:{{ order.name }}&nbsp;</span>
-          <span>Status:{{ order.status }}&nbsp;</span>
-          <span class="spacer"></span>
-          <button mat-raised-button
-            color="primary"
-            [routerLink]="['/order', order.id]"
-            routerLinkActive="active">
-            Details
-          </button>
-          <button mat-raised-button
-            (click)="removeOrder(order)">
-            Remove
-          </button>
-        </mat-list-item>
-        </mat-list>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</app-header-layout>
+
+  <mat-accordion sidenav>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Create order</mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-order-input-data></app-order-input-data>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <table mat-table content [dataSource]="orders$ | async" [trackBy]="trackById">
+
+    <ng-container [matColumnDef]="column.param" *ngFor="let column of columnSchema">
+      <th mat-header-cell *matHeaderCellDef> {{ column.name }} </th>
+      <td mat-cell *matCellDef="let element"> {{ element[column.param] }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="bt-details">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let order">
+        <button mat-raised-button color="primary" [routerLink]="['/order', order.id]" routerLinkActive="active">
+          Details
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="bt-remove">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let order">
+        <button mat-raised-button (click)="removeOrder(order)">
+          Remove
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</app-layout>

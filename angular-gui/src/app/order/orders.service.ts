@@ -26,7 +26,8 @@ export class OrdersService {
     return this.http.delete<void>(`/api/orders/${id}`);
   }
 
-  updateOrderStatus(id: number, status: OrderStatus): Observable<Order> {
-    return this.http.post<Order>(`/api/orders/${id}`, { status });
+  releaseOrder(id: number): Observable<Order> {
+    return this.http.post<Order>(`/api/orders/${id}/release`, {});
   }
+
 }

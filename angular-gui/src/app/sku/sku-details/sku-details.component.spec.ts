@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HeaderLayoutComponent } from './header-layout.component';
+import { SkuDetailsComponent } from './sku-details.component';
 
-describe('HeaderLayoutComponent', () => {
-  let component: HeaderLayoutComponent;
-  let fixture: ComponentFixture<HeaderLayoutComponent>;
+describe('SkuDetailsComponent', () => {
+  let component: SkuDetailsComponent;
+  let fixture: ComponentFixture<SkuDetailsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HeaderLayoutComponent ]
+      declarations: [ SkuDetailsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeaderLayoutComponent);
+    fixture = TestBed.createComponent(SkuDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

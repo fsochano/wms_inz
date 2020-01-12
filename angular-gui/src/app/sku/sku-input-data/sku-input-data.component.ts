@@ -18,8 +18,8 @@ export class SkuInputDataComponent implements OnInit {
     private service: SkuService,
     private store: Store<AppState>) {
     this.form = fb.group({
-      name: ['name', [Validators.required]],
-      description: ['description', [Validators.required]],
+      name: [null, [Validators.required]],
+      description: [null, [Validators.required]],
     });
   }
 
@@ -31,7 +31,7 @@ export class SkuInputDataComponent implements OnInit {
     this.service.createSku(val.name, val.description)
     .subscribe(
       sku => this.store.dispatch(SkusActions.skuCreated({ sku })),
-      () => alert('order not created'),
+      () => alert('Sku not created'),
     );
   }
 

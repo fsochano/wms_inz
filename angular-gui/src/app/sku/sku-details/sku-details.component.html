@@ -1,0 +1,15 @@
+<app-layout>
+    <h1 header>SKU {{ 'TODO SKU NAME' }}</h1>
+    <div sidenav class="side-nav">
+        <button mat-raised-button routerLink="/sku" routerLinkActive="active">Back</button>
+        <!-- <app-sku-properties [sku]="sku$ | async"></app-sku-properties> -->
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Assign Sku Config</mat-panel-title>
+                </mat-expansion-panel-header>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+    <div content> c </div>
+</app-layout>

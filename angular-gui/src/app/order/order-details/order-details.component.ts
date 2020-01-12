@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../app.reducer';
 import { Order, OrderLine, OrderStatus } from '../store/orders.model';
@@ -9,7 +9,7 @@ import { OrdersService } from '../orders.service';
 import { OrderLinesActions } from '../store/order-lines.actions';
 import { OrderLinesService } from '../order-lines.service';
 import { OrdersActions } from '../store/orders.actions';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, filter } from 'rxjs/operators';
 import { OrdersSelectors } from '../store/orders.selector';
 
 @Component({
@@ -19,7 +19,12 @@ import { OrdersSelectors } from '../store/orders.selector';
 })
 export class OrderDetailsComponent implements OnInit {
 
-  order$: Observable<Order> = this.store.select(OrdersSelectors.selectOrder(this.route.snapshot.params.orderId));
+  order$: Observable<Order> = this.store.select(OrdersSelectors.selectOrder(this.route.snapshot.params.orderId)).pipe(
+    filter(o => o !== undefined),
+  );
+  orderName$: Observable<string> = this.order$.pipe(
+    map(order => order.name),
+  );
   orderLines$: Observable<OrderLine[]> = this.store.select(OrderLinesSelectors.selectAllOrderLines);
 
 
@@ -36,16 +41,18 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   releaseOrder() {
-    this.service.updateOrderStatus(this.orderId, OrderStatus.RELEASED)
+    this.service.releaseOrder(this.orderId)
       .subscribe(
-        ({ id }) => this.store.dispatch(OrdersActions.orderReleased({ id }))
+        ({ id }) => this.store.dispatch(OrdersActions.orderReleased({ id })),
+        error => alert(error.error.message),
       );
   }
 
   removeOrderLine({ id }: OrderLine) {
     this.orderLineService.removeOrderLine(this.orderId, id)
     .subscribe(
-      () => this.store.dispatch(OrderLinesActions.orderLineRemoved({ id }))
+      () => this.store.dispatch(OrderLinesActions.orderLineRemoved({ id })),
+      error => alert(error.error.message),
     );
   }
 

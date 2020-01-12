@@ -1,4 +1,4 @@
 <span>Id:{{ orderLine.id }} </span>
 <span>Qty:{{ orderLine.qty }} </span>
-<span>Item:{{ orderLine.item }} </span>
+<span>Item:{{ orderLine.sku.name }} </span>
 <button mat-raised-button (click)="remove.next(orderLine)">Remove</button>

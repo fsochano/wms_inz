@@ -23,7 +23,14 @@ export class SkuComponent implements OnInit {
 
   ngOnInit() {
     this.service.loadSkus()
-    .subscribe(skus => this.store.dispatch(SkusActions.skusLoaded({ skus })));
+      .subscribe(skus => this.store.dispatch(SkusActions.skusLoaded({ skus })));
+  }
+
+  removeSku(sku: Sku) {
+    this.service.removeSku(sku)
+      .subscribe(() => this.store.dispatch(SkusActions.skuRemoved({ sku })),
+        error => alert(error.error.message),
+      );
   }
 
 }

@@ -18,4 +18,5 @@ export const SkusReducers = createReducer(
     initialState,
     on(SkusActions.skusLoaded, (state, { skus }) => SkusAdapter.addAll(skus, state)),
     on(SkusActions.skuCreated, (state, { sku }) => SkusAdapter.addOne(sku, state)),
+    on(SkusActions.skuRemoved, (state, { sku }) => SkusAdapter.removeOne(sku.id, state)),
 );
