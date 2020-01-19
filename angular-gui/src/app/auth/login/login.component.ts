@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { tap, first } from 'rxjs/operators';
-import { noop } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +21,7 @@ export class LoginComponent {
     private router: Router,
     private store: Store<AppState>) {
     this.form = fb.group({
-      email: ['user', [Validators.required]],
+      email: ['admin', [Validators.required]],
       password: ['password', [Validators.required]]
     });
   }

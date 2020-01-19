@@ -21,6 +21,14 @@ export class SkuComponent implements OnInit {
     private readonly service: SkuService,
   ) { }
 
+  columnSchema: any[] = [
+    { name: 'Id', param: 'id' },
+    { name: 'Description', param: 'description' },
+    { name: 'Name', param: 'name' },    
+  ];
+
+  displayedColumns : string[] = ['id' ,'name','description','bt-remove'];
+
   ngOnInit() {
     this.service.loadSkus()
       .subscribe(skus => this.store.dispatch(SkusActions.skusLoaded({ skus })));

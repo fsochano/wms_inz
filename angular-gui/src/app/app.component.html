@@ -2,17 +2,18 @@
 
   <div class="header">
     <mat-toolbar color="primary" *ngIf="isUserLogged$ | async">
-      <mat-toolbar-row>
+      <mat-toolbar-row class="app-header">
         <span class="header-message">Welcome {{ userName$ | async }}!</span>
         <nav mat-tab-nav-bar backgroundColor="primary">
-          <a mat-tab-link routerLink="/order" routerLinkActive="active" #ordersLinkActive="routerLinkActive"
-            [active]="ordersLinkActive.isActive">Orders</a>
-          <a mat-tab-link routerLink="/sku" routerLinkActive="active" #skuLinkActive="routerLinkActive"
-            [active]="skuLinkActive.isActive">SKU</a>
-          <a mat-tab-link routerLink="/location" routerLinkActive="active" #locationLinkActive="routerLinkActive"
-            [active]="locationLinkActive.isActive">Location</a>
+          <a mat-tab-link routerLink="/order" routerLinkActive="active" #orders="routerLinkActive"
+            [active]="orders.isActive">Ordering</a>
+          <a mat-tab-link routerLink="/picking" routerLinkActive="active" #picking="routerLinkActive"
+            [active]="picking.isActive">Picking</a>
+          <a mat-tab-link routerLink="/shipping" routerLinkActive="active" #shipping="routerLinkActive"
+            [active]="shipping.isActive">Shipping</a>
+          <a mat-tab-link routerLink="/settings" routerLinkActive="active" #settings="routerLinkActive"
+            [active]="settings.isActive">Settings</a>
         </nav>
-        <span class="spacer"></span>
         <button mat-raised-button routerLink="/login" routerLinkActive="active" (click)="logout()">
           Logout
         </button>

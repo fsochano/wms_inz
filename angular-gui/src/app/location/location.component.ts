@@ -23,7 +23,8 @@ export class LocationComponent implements OnInit {
     { name: 'Location used capacity', param: 'usedCapacity' },
     { name: 'Location free capacity', param: 'freeCapacity' },
   ];
-  displayedColumns = this.columnSchema.map(c => c.param);
+  //displayedColumns = this.columnSchema.map(c => c.param);
+  displayedColumns: string[] = ['name', 'locationType', 'capacity', 'usedCapacity', 'freeCapacity','bt-details'];
 
   constructor(
     private locationService: LocationService,

@@ -1,5 +1,6 @@
 package com.sochanski.container;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sochanski.location.Location;
 import com.sochanski.sku.Sku;
 import org.hibernate.annotations.LazyToOne;
@@ -18,6 +19,7 @@ public class Container {
     @SequenceGenerator(name = "container_id_gen", sequenceName = "container_id_gen", allocationSize = 1)
     public long id;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "location_id", nullable = false)
     @LazyToOne(value = LazyToOneOption.PROXY)

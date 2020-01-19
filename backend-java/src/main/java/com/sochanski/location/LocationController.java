@@ -1,6 +1,7 @@
 package com.sochanski.location;
 
 import com.sochanski.ApiUtils;
+import com.sochanski.container.Container;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,4 +27,10 @@ public class LocationController {
     public Location createLocation(@RequestBody @Valid LocationParameters params) {
         return service.createLocation(params);
     }
+
+    @GetMapping(path = "/{locationId}/containers")
+    public List<Container> getLocationContainers(@PathVariable long locationId) {
+        return service.getLocationContainers(locationId);
+    }
+
 }

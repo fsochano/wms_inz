@@ -33,7 +33,7 @@ export class OrderInputDetailsComponent implements OnInit {
     private store: Store<AppState>
     ) {
     this.form = fb.group({
-      qty: [1, [Validators.required, Validators.min(1)]],
+      qty: [null, [Validators.required, Validators.min(1)]],
       skuId: [null, [Validators.required]],
     });
     this.sku$ = skuService.loadSkus();

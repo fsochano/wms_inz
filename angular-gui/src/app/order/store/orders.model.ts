@@ -3,7 +3,8 @@ import { Sku } from '../../sku/store/sku.model';
 export enum OrderStatus {
     HOLD = 'HOLD',
     RELEASED = 'RELEASED',
-    PICKED = 'PICKED',
+    COMPLETED = 'COMPLETED',
+    SHIPPED = 'SHIPPED',
 }
 
 export interface Order {

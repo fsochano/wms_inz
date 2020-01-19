@@ -28,7 +28,7 @@ public class Location {
     @NotEmpty
     public String name;
 
-    @MapKeyEnumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     public LocationType locationType;
 
     @Positive

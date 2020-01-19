@@ -3,7 +3,7 @@
 
 
   <div sidenav class="side-nav">
-    <button mat-raised-button routerLink="/order" routerLinkActive="active">Back</button>
+    <button mat-raised-button routerLink="../" routerLinkActive="active">Back</button>
     <app-order-properties [order]="order$ | async"></app-order-properties>
     <button mat-raised-button (click)="releaseOrder()">Release</button>
     <mat-accordion>

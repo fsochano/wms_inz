@@ -5,7 +5,8 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotEmpty;
 
 @Validated
-public class OrderCreateParams {
+public class OrderHeaderCreateParams {
     @NotEmpty
     public String name;
+    public String last_changed_by;
 }

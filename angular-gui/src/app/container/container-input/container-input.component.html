@@ -1,0 +1,29 @@
+<form [formGroup]="form" class="details-form">
+    <mat-form-field>
+        <mat-label>Container size</mat-label>
+        <input matInput type="number" formControlName="containerSize">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Item</mat-label>
+        <mat-select formControlName="skuId">
+          <mat-option *ngFor="let sku of sku$ | async" [value]="sku.id">
+            {{ sku.name }}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>SKU quantity</mat-label>
+        <input matInput type="number" formControlName="skuQty">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>SKU capacity</mat-label>
+        <input matInput type="number" formControlName="skuCapacity">
+    </mat-form-field>
+    <button mat-raised-button
+        color="primary"
+        (click)="createContainer()"
+        [disabled]="!form.valid">
+        Create
+    </button>
+</form>
+<mat-error *ngIf="error">{{error}}</mat-error>

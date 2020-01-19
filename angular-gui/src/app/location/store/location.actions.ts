@@ -3,8 +3,12 @@ import { createAction, props } from '@ngrx/store';
 
 class Actions {
     readonly locationsLoaded = createAction(
-        '[Locations Component] Locations loaded',
+        '[Locations] Locations loaded',
         props<{ locations: WarehouseLocation[] }>(),
+    );
+    readonly locationCreated = createAction(
+        '[Locations] Location created',
+        props<{ location: WarehouseLocation }>(),
     );
 }
 

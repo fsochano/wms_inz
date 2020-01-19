@@ -21,6 +21,11 @@ class Selectors {
         this.user,
         user => user && user.token,
     );
+
+    authorities = createSelector(
+        this.user,
+        user => user && user.authorities,
+    );
 }
 
 export const AuthSelectors = new Selectors();

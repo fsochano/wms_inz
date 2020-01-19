@@ -5,7 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotEmpty;
 
 @Validated
-public class User {
+public class UserLoginParams {
     @NotEmpty(message = "Must contain username")
     public String username;
     @NotEmpty(message = "Must contain password")

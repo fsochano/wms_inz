@@ -1,7 +1,8 @@
 package com.sochanski.order.data;
 
-public enum OrderStatus {
+public enum OrderHeaderStatus {
     HOLD,
     RELEASED,
-    PICKED
+    COMPLETED,
+    SHIPPED,
 }

@@ -1,6 +1,6 @@
 package com.sochanski.order;
 
-import com.sochanski.order.data.Order;
+import com.sochanski.order.data.OrderHeader;
 import com.sochanski.order.data.OrderLine;
 import com.sochanski.order.data.OrderLineParameters;
 import com.sochanski.sku.Sku;
@@ -13,35 +13,35 @@ import java.util.List;
 @Service
 public class OrderLinesService {
 
-    private final OrderService orderService;
+    private final OrderHeaderService orderHeaderService;
     private final OrderLineRepository orderLineRepository;
     private final SkuRepository skuRepository;
 
-    public OrderLinesService(OrderService orderService, OrderLineRepository orderLineRepository, SkuRepository skuRepository) {
-        this.orderService = orderService;
+    public OrderLinesService(OrderHeaderService orderHeaderService, OrderLineRepository orderLineRepository, SkuRepository skuRepository) {
+        this.orderHeaderService = orderHeaderService;
         this.orderLineRepository = orderLineRepository;
         this.skuRepository = skuRepository;
     }
 
     public List<OrderLine> getOrderLinesForOrder(long orderId) {
-        return orderService.getOrder(orderId).orderLines;
+        return orderHeaderService.getOrder(orderId).orderLines;
     }
 
     public OrderLine createOrderLineForOrder(long orderId, OrderLineParameters orderLineParameters) {
-        Order order = orderService.getOrder(orderId);
-        orderService.checkOrderStatusHold(order);
+        OrderHeader orderHeader = orderHeaderService.getOrder(orderId);
+        orderHeaderService.checkOrderStatusHold(orderHeader);
 
         if (orderLineParameters.qty <= 0) {
             throw new BadOrderLinesParametersException();
         }
         Sku sku = skuRepository.findById(orderLineParameters.skuId).orElseThrow(SkuNotFoundException::new);
-        OrderLine orderLine = new OrderLine(orderLineParameters.qty, sku, order);
+        OrderLine orderLine = new OrderLine(orderLineParameters.qty, sku, orderHeader);
         return orderLineRepository.save(orderLine);
     }
 
     public void deleteOrderLine(long orderId, long orderLineId) {
-        Order order = orderService.getOrder(orderId);
-        orderService.checkOrderStatusHold(order);
+        OrderHeader orderHeader = orderHeaderService.getOrder(orderId);
+        orderHeaderService.checkOrderStatusHold(orderHeader);
 
         if(!orderLineRepository.existsById(orderLineId)) {
             throw new OrderLineNotFoundException();

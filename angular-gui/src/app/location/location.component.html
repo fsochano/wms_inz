@@ -7,7 +7,7 @@
             <mat-expansion-panel-header>
                 <mat-panel-title>Create Location</mat-panel-title>
             </mat-expansion-panel-header>
-            <!-- <app-location-input-data></app-location-input-data> -->
+            <app-location-input></app-location-input>
         </mat-expansion-panel>
     </mat-accordion>
 
@@ -16,6 +16,15 @@
             <th mat-header-cell *matHeaderCellDef> {{ column.name }} </th>
             <td mat-cell *matCellDef="let element"> {{ element[column.param] }} </td>
         </ng-container>
+
+        <ng-container matColumnDef="bt-details">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let location">
+              <button mat-raised-button color="primary" [routerLink]="['../location', location.id]" routerLinkActive="active">
+                Details
+              </button>
+            </td>
+          </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

@@ -14,4 +14,6 @@ export const LocationsReducer = createReducer(
     initialState,
     on(LocationsActions.locationsLoaded,
         (state, { locations }) => LocationsAdapter.addAll(locations, state)),
+    on(LocationsActions.locationCreated,
+        (state, { location }) => LocationsAdapter.addOne(location, state)),
 );

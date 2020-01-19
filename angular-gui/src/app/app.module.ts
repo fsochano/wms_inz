@@ -15,6 +15,10 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { SkuModule } from './sku/sku.module';
 import { SharedModule } from './shared/shared.module';
+import { ContainerModule } from './container/container.module';
+import { PickingModule } from './picking/picking.module';
+import { SettingsModule } from './settings/settings.module';
+import { ShippingModule } from './shipping/shipping.module';
 
 
 @NgModule({
@@ -27,8 +31,9 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     AuthModule,
     OrderModule,
-    SkuModule,
-    LocationModule,
+    PickingModule,
+    ShippingModule,
+    SettingsModule,
     AppRoutingModule,
     StoreModule.forRoot({}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],

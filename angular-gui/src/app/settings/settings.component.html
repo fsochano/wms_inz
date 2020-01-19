@@ -1,0 +1,16 @@
+<div class="header">
+    <mat-toolbar color="secondary">
+        <mat-toolbar-row class="navigation">
+            <nav mat-tab-nav-bar backgroundColor="secondary">
+                <a mat-tab-link routerLink="/settings/sku" routerLinkActive="active" #sku="routerLinkActive"
+                    [active]="sku.isActive">SKU</a>
+                <a mat-tab-link routerLink="/settings/location" routerLinkActive="active" #location="routerLinkActive"
+                    [active]="location.isActive">Location</a>
+            </nav>
+        </mat-toolbar-row>
+    </mat-toolbar>
+</div>
+
+<div class="content">
+    <router-outlet></router-outlet>
+</div>

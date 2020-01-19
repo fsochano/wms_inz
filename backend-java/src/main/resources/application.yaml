@@ -21,10 +21,10 @@ spring:
     password: password
     driver-class-name: oracle.jdbc.OracleDriver
     platform: oracle
-#    initialization-mode: always
-#    hikari:
-#      connection-timeout: 60000
-#      maximum-pool-size: 5
+    initialization-mode: always
+    hikari:
+      connection-timeout: 60000
+      maximum-pool-size: 5
 #logging:
 #  level:
 #    org:

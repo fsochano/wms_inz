@@ -6,10 +6,9 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../app.reducer';
 import { Observable } from 'rxjs';
 import { AuthSelectors } from '../auth/auth.selectror';
-import { Order } from './store/orders.model';
+import { Order, OrderStatus } from './store/orders.model';
 import { OrdersService } from './orders.service';
 import { OrdersSelectors } from './store/orders.selector';
-import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-order',
@@ -25,8 +24,10 @@ export class OrderComponent implements OnInit {
   columnSchema: any[] = [
     { name: 'Order Name', param: 'name' },
     { name: 'Order Status', param: 'status' },
+    { name: 'Last Change By', param: 'lastChangeBy' },
+    { name: 'Last Change Date', param: 'lastChangeDate' },
   ];
-  displayedColumns: string[] = ['name', 'status', 'bt-details', 'bt-remove'];
+  displayedColumns: string[] = ['name', 'status', 'lastChangeBy', 'lastChangeDate', 'bt-actions'];
 
   constructor(
     private readonly store: Store<AppState>,
@@ -47,8 +48,13 @@ export class OrderComponent implements OnInit {
     );
   }
 
+  
   trackById(order?: Order) {
     return order && order.id;
+  }
+
+  isDisabled({ status }: Order) {
+    return status !== OrderStatus.HOLD;
   }
 
 }

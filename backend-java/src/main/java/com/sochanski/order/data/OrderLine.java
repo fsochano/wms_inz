@@ -28,12 +28,12 @@ public class OrderLine {
     @ManyToOne(optional = false)
     @JoinColumn(name = "order_header_id", nullable = false, updatable = false)
     @LazyToOne(value = LazyToOneOption.PROXY)
-    public Order order;
+    public OrderHeader orderHeader;
 
 
-    public OrderLine(long qty, Sku sku, Order order) {
+    public OrderLine(long qty, Sku sku, OrderHeader orderHeader) {
         this.qty = qty;
-        this.order = order;
+        this.orderHeader = orderHeader;
         this.sku = sku;
     }
 

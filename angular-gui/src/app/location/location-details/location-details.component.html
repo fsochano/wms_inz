@@ -1,0 +1,32 @@
+<app-layout>
+
+    <h1 header>Location Details</h1>
+
+    <div sidenav class="side-nav">
+        <button mat-raised-button routerLink="../" routerLinkActive="active">Back</button>
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Create Container</mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-container-input [locationId]="locationId"></app-container-input>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+    
+
+    <table mat-table content [dataSource]="containers$ | async">
+        <ng-container [matColumnDef]="column.param" *ngFor="let column of columnSchema">
+            <th mat-header-cell *matHeaderCellDef> {{ column.name }} </th>
+            <td mat-cell *matCellDef="let element"> {{ element[column.param] }} </td>
+        </ng-container>
+        <ng-container matColumnDef="skuName" >
+            <th mat-header-cell *matHeaderCellDef> Sku name </th>
+            <td mat-cell *matCellDef="let element"> {{ element.sku.name }} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+</app-layout>

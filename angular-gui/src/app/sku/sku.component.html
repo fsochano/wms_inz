@@ -10,20 +10,37 @@
           <app-sku-input-data></app-sku-input-data>
         </mat-expansion-panel>
       </mat-accordion>
-      
-      <mat-list content>
-        <mat-list-item *ngFor="let sku of skus$ | async;">
-          <span>{{ sku.id }}&nbsp;</span>
-          <span>{{ sku.name }}&nbsp;</span>
-          <span>{{ sku.description }}&nbsp;</span>
-          <span class="spacer"></span>
-          <button mat-raised-button color="primary" [routerLink]="['/sku', sku.id]" routerLinkActive="active">
-            Details
-          </button>
-          <button mat-raised-button (click)="removeSku(sku)">
-            Remove
-          </button>
-        </mat-list-item>
-      </mat-list>
+  
+        <table mat-table content [dataSource]="skus$ | async">
 
+          <ng-container [matColumnDef]="column.param" *ngFor="let column of columnSchema">
+            <th mat-header-cell *matHeaderCellDef> {{ column.name }} </th>
+            <td mat-cell *matCellDef="let element"> {{ element[column.param] }} </td>
+          </ng-container>
+<!-- 
+          <ng-container matColumnDef="bt-details">
+            <th mat-header-cell *matHeaderCellDef> </th>
+            <td mat-cell *matCellDef="let sku">
+              <button mat-raised-button color="primary" [routerLink]="['../sku', sku.id]" routerLinkActive="active">
+                Details
+              </button>
+            </td>
+          </ng-container> -->
+
+          <ng-container matColumnDef="bt-remove">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let sku">
+              <button mat-raised-button (click)="removeSku(sku)">
+                Remove
+              </button>
+            </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+    
+
+      
 </app-layout>
