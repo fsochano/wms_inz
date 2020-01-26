@@ -1,8 +1,8 @@
-import { AppState } from './../app.reducer';
+
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { AuthSelectors } from './auth.selectror';
 import { Store } from '@ngrx/store';
 
@@ -11,7 +11,7 @@ import { Store } from '@ngrx/store';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private store: Store<AppState>, private router: Router) {
+  constructor(private store: Store<{}>, private router: Router) {
   }
 
   canActivate(): Observable<boolean | UrlTree> {

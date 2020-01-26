@@ -2,9 +2,9 @@ package com.sochanski.location;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sochanski.container.Container;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -12,38 +12,38 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "location")
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "location_id_gen")
     @SequenceGenerator(name = "location_id_gen", sequenceName = "location_id_gen", allocationSize = 1)
-    public long id;
+    private long id;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "location")
-    @LazyCollection(value = LazyCollectionOption.TRUE)
-    public List<Container> containers;
+    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY)
+    private List<Container> containers = emptyList();
 
     @NotEmpty
-    public String name;
+    private String name;
 
     @Enumerated(EnumType.STRING)
-    public LocationType locationType;
+    private LocationType locationType;
 
     @Positive
-    public long capacity;
+    private long capacity;
 
     @PositiveOrZero
     @Formula("coalesce((select sum(c.container_size) from Container c where c.location_id = id), 0)")
-    public long usedCapacity;
+    private long usedCapacity;
 
     @PositiveOrZero
     @Formula("capacity - coalesce((select sum(c.container_size) from Container c where c.location_id = id), 0)")
-    public long freeCapacity;
-
-    public Location() {
-    }
+    private long freeCapacity;
 
     public Location(String name, LocationType locationType, long capacity) {
         this.name = name;

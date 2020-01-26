@@ -1,6 +1,11 @@
+import { ColumnSchema } from './../../shared/column-schema.model';
+import { PickTasksSelectors } from './store/pick-tasks.selector';
+import { PickTasksActions } from './store/pick-tasks.actions';
+import { PickTasksService } from './pick-tasks.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { PickTask } from './pick-tasks.model';
 
 @Component({
   selector: 'app-pick-task',
@@ -9,7 +14,7 @@ import { of } from 'rxjs';
 })
 export class PickTaskComponent implements OnInit {
 
-  columnSchema = [
+  columnSchema: ColumnSchema<PickTask>[] = [
     { param: 'id', name: 'Id' },
     { param: 'fromLocation', name: 'Source location' },
     { param: 'fromContainer', name: 'Source container' },
@@ -19,21 +24,19 @@ export class PickTaskComponent implements OnInit {
   ];
   displayedColumns = [...this.columnSchema.map(s => s.param), 'bt-actions'];
 
-  moveTasks$ = of([
-    { id: 1337, fromLocation: 'ASD', fromContainer: 'DSA', qty: 5, toLocation: 'QWE', toContainer: 'EWQ', status: 'READY' },
-    { id: 1338, fromLocation: 'ASD', fromContainer: 'DSA', qty: 5, toLocation: 'QWE', toContainer: 'EWQ', status: 'PICKED' },
-    { id: 1339, fromLocation: 'ASD', fromContainer: 'DSA', qty: 5, toLocation: 'QWE', toContainer: 'EWQ', status: 'COMPLETED' },
-    { id: 1340, fromLocation: 'ASD', fromContainer: 'DSA', qty: 5, toLocation: 'QWE', toContainer: 'EWQ', status: 'SHIPPED' },
-  ]);
+  moveTasks$ = this.store.select(PickTasksSelectors.selectAllPickTasks);
 
   constructor(
-    private route: ActivatedRoute,
+    private readonly route: ActivatedRoute,
+    private readonly store: Store<{}>,
+    private readonly pickTasksService: PickTasksService,
   ) { }
 
   ngOnInit() {
+    this.store.dispatch(PickTasksActions.pickTaksRequested({ pickListId: this.pickListId }));
   }
 
-  isDisabled(elem: { status: string }) {
+  isDisabled(elem: PickTask) {
     switch (elem.status) {
       case 'READY':
       case 'PICKED':
@@ -43,7 +46,7 @@ export class PickTaskComponent implements OnInit {
     }
   }
 
-  getButtonName(elem: { status: string }) {
+  getButtonName(elem: PickTask) {
     switch (elem.status) {
       case 'READY':
         return 'Pick';
@@ -54,7 +57,20 @@ export class PickTaskComponent implements OnInit {
     }
   }
 
-  get pickTaskId() {
-    return this.route.snapshot.params.pickTaskId;
+  changeState(elem: PickTask) {
+    if (elem.status === 'READY') {
+      this.pickTasksService.pickPickTask(elem.id).subscribe(
+        pickTask => this.store.dispatch(PickTasksActions.pickTaskUpdated({ pickTask })),
+      )
+    } else if(elem.status === 'PICKED') {
+      this.pickTasksService.completePickTask(elem.id).subscribe(
+        pickTask => this.store.dispatch(PickTasksActions.pickTaskUpdated({ pickTask })),
+      )
+    }
   }
+
+  get pickListId() {
+    return this.route.snapshot.params.pickListId;
+  }
+
 }

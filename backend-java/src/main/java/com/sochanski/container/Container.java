@@ -3,13 +3,15 @@ package com.sochanski.container;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sochanski.location.Location;
 import com.sochanski.sku.Sku;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "container")
 public class Container {
@@ -17,29 +19,24 @@ public class Container {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "container_id_gen")
     @SequenceGenerator(name = "container_id_gen", sequenceName = "container_id_gen", allocationSize = 1)
-    public long id;
+    private long id;
 
     @JsonIgnore
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id", nullable = false)
-    @LazyToOne(value = LazyToOneOption.PROXY)
-    public Location location;
+    private Location location;
 
     @Positive
-    public long containerSize;
+    private long containerSize;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "sku_id", nullable = false)
-    @LazyToOne(value = LazyToOneOption.PROXY)
-    public Sku sku;
+    private Sku sku;
 
     @PositiveOrZero
-    public long skuQty;
+    private long skuQty;
     @Positive
-    public long skuCapacity;
-
-    public Container(){
-    }
+    private long skuCapacity;
 
     public Container(Location location, int containerSize, Sku sku, int skuQty, int skuCapacity){
         this.location = location;

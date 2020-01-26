@@ -1,9 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { OrderLine } from '../../store/orders.model';
 import { OrderLinesService } from '../../order-lines.service';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.reducer';
-import { OrderLinesActions } from '../../store/order-lines.actions';
 
 @Component({
   selector: 'app-order-line-details',
@@ -20,7 +18,7 @@ export class OrderLineDetailsComponent {
 
   constructor(
     private readonly service: OrderLinesService,
-    private readonly store: Store<AppState>,
+    private readonly store: Store<{}>,
   ) { }
 
 }

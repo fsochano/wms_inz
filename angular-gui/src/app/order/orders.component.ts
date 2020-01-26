@@ -1,9 +1,7 @@
-import { SkuService } from './../sku/sku.service';
-import { Router } from '@angular/router';
+import { ColumnSchema } from './../shared/column-schema.model';
 import { OrdersActions } from './store/orders.actions';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../app.reducer';
 import { Observable } from 'rxjs';
 import { AuthSelectors } from '../auth/auth.selectror';
 import { Order, OrderStatus } from './store/orders.model';
@@ -21,16 +19,16 @@ export class OrderComponent implements OnInit {
   orders$: Observable<Order[]> = this.store.select(OrdersSelectors.selectAllOrders);
   user$: Observable<string> = this.store.select(AuthSelectors.userName);
 
-  columnSchema: any[] = [
+  readonly columnSchema: ColumnSchema<Order>[] = [
     { name: 'Order Name', param: 'name' },
     { name: 'Order Status', param: 'status' },
     { name: 'Last Change By', param: 'lastChangeBy' },
     { name: 'Last Change Date', param: 'lastChangeDate' },
   ];
-  displayedColumns: string[] = ['name', 'status', 'lastChangeBy', 'lastChangeDate', 'bt-actions'];
+  readonly displayedColumns = [...this.columnSchema.map(s => s.param), 'bt-actions'];
 
   constructor(
-    private readonly store: Store<AppState>,
+    private readonly store: Store<{}>,
     private readonly service: OrdersService,
   ) { }
 

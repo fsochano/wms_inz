@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.reducer';
 import { OrdersService } from '../orders.service';
 import { OrdersActions } from '../store/orders.actions';
 
@@ -18,7 +16,7 @@ export class OrderInputDataComponent implements OnInit {
   constructor(
     fb: FormBuilder,
     private ordersService: OrdersService,
-    private store: Store<AppState>) {
+    private store: Store<{}>) {
     this.form = fb.group({
       name: [null, [Validators.required]],
     });

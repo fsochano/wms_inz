@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../app.reducer';
 import { Order, OrderLine, OrderStatus } from '../store/orders.model';
 import { Observable } from 'rxjs';
 import { OrderLinesSelectors } from '../store/order-lines.selector';
@@ -30,7 +29,7 @@ export class OrderDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private store: Store<AppState>,
+    private store: Store<{}>,
     private service: OrdersService,
     private orderLineService: OrderLinesService,
   ) { }

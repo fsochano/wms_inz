@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SkuService } from '../sku.service';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../app.reducer';
 
 @Component({
   selector: 'app-sku-input-data',
@@ -16,7 +15,7 @@ export class SkuInputDataComponent implements OnInit {
   constructor(
     fb: FormBuilder,
     private service: SkuService,
-    private store: Store<AppState>) {
+    private store: Store<{}>) {
     this.form = fb.group({
       name: [null, [Validators.required]],
       description: [null, [Validators.required]],

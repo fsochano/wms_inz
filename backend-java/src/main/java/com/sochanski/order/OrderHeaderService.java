@@ -38,7 +38,7 @@ public class OrderHeaderService {
         return orderHeaderRepository.findById(id)
                 .map(order -> {
                     checkOrderStatusHold(order);
-                    order.status = OrderHeaderStatus.RELEASED;
+                    order.setStatus(OrderHeaderStatus.RELEASED);
                     return order;
                 }).map(orderHeaderRepository::save)
                 .orElseThrow(OrderHeaderNotFoundException::new);
@@ -47,7 +47,7 @@ public class OrderHeaderService {
     public OrderHeader updateOrder(long id, OrderHeaderUpdateParams params) {
         return orderHeaderRepository.findById(id)
                 .map(order -> {
-                    params.name.ifPresent(a -> order.name = a);
+                    params.name.ifPresent(order::setName);
                     return order;
                 }).map(orderHeaderRepository::save)
                 .orElseThrow(OrderHeaderNotFoundException::new);
@@ -61,7 +61,7 @@ public class OrderHeaderService {
     }
 
     public void checkOrderStatusHold(OrderHeader orderHeader) {
-        if (orderHeader.status != OrderHeaderStatus.HOLD) {
+        if (orderHeader.getStatus() != OrderHeaderStatus.HOLD) {
             throw new WrongOrderHeaderStatusException(OrderHeaderStatus.HOLD);
         }
     }

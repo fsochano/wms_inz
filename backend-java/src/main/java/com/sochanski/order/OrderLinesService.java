@@ -24,7 +24,7 @@ public class OrderLinesService {
     }
 
     public List<OrderLine> getOrderLinesForOrder(long orderId) {
-        return orderHeaderService.getOrder(orderId).orderLines;
+        return orderHeaderService.getOrder(orderId).getOrderLines();
     }
 
     public OrderLine createOrderLineForOrder(long orderId, OrderLineParameters orderLineParameters) {

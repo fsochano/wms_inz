@@ -19,9 +19,9 @@ class Selectors {
         selectEntities
     );
 
-    selectAreAllOrdersLoaded = createSelector(
+    isLoading = createSelector(
         this.feature,
-        state => state.allOrdersLoaded,
+        state => state.isLoading,
     );
 
     selectOrder(id: string) {

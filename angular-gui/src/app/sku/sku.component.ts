@@ -1,7 +1,7 @@
+import { ColumnSchema } from './../shared/column-schema.model';
 import { SkuService } from './sku.service';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../app.reducer';
 import { Observable } from 'rxjs';
 import { SkusActions } from './store/sku.actions';
 import { Sku } from './store/sku.model';
@@ -14,20 +14,20 @@ import { SkusSelectors } from './store/sku.selector';
 })
 export class SkuComponent implements OnInit {
 
+  readonly columnSchema: ColumnSchema<Sku>[] = [
+    { name: 'Id', param: 'id' },
+    { name: 'Description', param: 'description' },
+    { name: 'Name', param: 'name' },
+  ];
+
+  readonly displayedColumns = [...this.columnSchema.map(s => s.param), 'bt-remove'];
+
   skus$: Observable<Sku[]> = this.store.select(SkusSelectors.selectAllSkus);
 
   constructor(
-    private readonly store: Store<AppState>,
+    private readonly store: Store<{}>,
     private readonly service: SkuService,
   ) { }
-
-  columnSchema: any[] = [
-    { name: 'Id', param: 'id' },
-    { name: 'Description', param: 'description' },
-    { name: 'Name', param: 'name' },    
-  ];
-
-  displayedColumns : string[] = ['id' ,'name','description','bt-remove'];
 
   ngOnInit() {
     this.service.loadSkus()

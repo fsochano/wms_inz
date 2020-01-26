@@ -10,7 +10,6 @@ const BASE_PATH = `${BASE_API_URL}/sku`;
   providedIn: 'root'
 })
 export class SkuService {
- 
 
   constructor(private readonly http: HttpClient) { }
 
@@ -18,7 +17,6 @@ export class SkuService {
     return this.http.get<Sku[]>(BASE_PATH);
   }
 
-  
   createSku(name: string, description: string): Observable<Sku> {
     return this.http.post<Sku>(BASE_PATH, { name, description });
   }

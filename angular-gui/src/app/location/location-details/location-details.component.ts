@@ -1,12 +1,11 @@
-import { LocationService } from './../location.service';
+import { LocationsActions } from './../store/location.actions';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { AppState } from '../../app.reducer';
 import { Store } from '@ngrx/store';
 import { ContainersSelectors } from '../../container/store/containers.selectors';
-import { ContainersActions } from '../../container/store/containers.actions';
 import { Container } from '../../container/store/containers.model';
+import { ColumnSchema } from 'src/app/shared/column-schema.model';
 
 @Component({
   selector: 'app-location-details',
@@ -14,7 +13,7 @@ import { Container } from '../../container/store/containers.model';
   styleUrls: ['./location-details.component.scss']
 })
 export class LocationDetailsComponent implements OnInit {
-  columnSchema: { param: keyof Container; name: string }[]  = [
+  columnSchema: ColumnSchema<Container>[]  = [
     { param: 'id', name: 'Id'},
     { param: 'containerSize', name: 'Container size' },
     { param: 'skuQty', name: 'Sku quantity' },
@@ -24,15 +23,12 @@ export class LocationDetailsComponent implements OnInit {
   containers$: Observable<Container[]> = this.store.select(ContainersSelectors.selectAllContainers);
 
   constructor(
-    private readonly service: LocationService,
     private readonly route: ActivatedRoute,
-    private readonly store: Store<AppState>,
+    private readonly store: Store<{}>,
   ) { }
 
   ngOnInit() {
-    this.service.getLocationContainers(this.locationId).subscribe(
-      containers => this.store.dispatch(ContainersActions.containersLoaded({ containers })),
-    );
+    this.store.dispatch(LocationsActions.locationsContainersRequested({ locationId: this.locationId }));
   }
 
   get locationId() {

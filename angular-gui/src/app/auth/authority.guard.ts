@@ -1,6 +1,5 @@
 import { CanActivate } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState } from '../app.reducer';
 import { Observable } from 'rxjs';
 import { AuthSelectors } from '../auth/auth.selectror';
 import { map } from 'rxjs/operators';
@@ -9,7 +8,7 @@ export class AuthorityGuard implements CanActivate {
 
   constructor(
     private readonly authority: string,
-    private readonly store: Store<AppState>
+    private readonly store: Store<{}>
   ) {
   }
 

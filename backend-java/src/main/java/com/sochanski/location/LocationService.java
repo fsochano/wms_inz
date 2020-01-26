@@ -24,7 +24,7 @@ public class LocationService {
 
     public List<Container> getLocationContainers(long locationId) {
         return repository.findById(locationId)
-                .map(location -> location.containers)
+                .map(Location::getContainers)
                 .orElseThrow(LocationNotFoundException::new);
     }
 }

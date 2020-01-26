@@ -1,7 +1,6 @@
 import { SkusAdapter, SkuState } from "./sku.reducer";
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 
-
 const {
     selectAll,
     // selectEntities,

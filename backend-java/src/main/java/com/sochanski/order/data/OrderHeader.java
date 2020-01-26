@@ -1,8 +1,8 @@
 package com.sochanski.order.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "order_header")
 public class OrderHeader {
@@ -18,26 +22,24 @@ public class OrderHeader {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_header_id_gen")
     @SequenceGenerator(name = "order_header_id_gen", sequenceName = "order_header_id_gen", allocationSize = 1)
-    public long id;
+    private long id;
 
     @NotNull
     @NotEmpty
-    public String name;
+    private String name;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    public OrderHeaderStatus status;
+    private OrderHeaderStatus status;
 
-    public String lastChangeBy;
+    private String lastChangeBy;
 
-    public LocalDateTime lastChangeDate;
+    private LocalDateTime lastChangeDate;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "orderHeader", cascade = CascadeType.REMOVE)
-    @LazyCollection(value = LazyCollectionOption.TRUE)
-    public List<OrderLine> orderLines;
+    @OneToMany(mappedBy = "orderHeader", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<OrderLine> orderLines = emptyList();
 
-    //    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     public OrderHeader(String name) {
         this(name, OrderHeaderStatus.HOLD, new ArrayList<>());
     }
@@ -46,9 +48,6 @@ public class OrderHeader {
         this.name = name;
         this.status = status;
         this.orderLines = orderLines;
-    }
-
-    public OrderHeader() {
     }
 
 }

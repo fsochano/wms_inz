@@ -3,12 +3,10 @@ import { Sku } from './../../../sku/store/sku.model';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.reducer';
 import { OrderLinesActions } from '../../store/order-lines.actions';
 import { OrderLinesService } from '../../order-lines.service';
 import { Order } from '../../store/orders.model';
 import { Observable } from 'rxjs';
-import { SkusSelectors } from 'src/app/sku/store/sku.selector';
 
 
 @Component({
@@ -30,7 +28,7 @@ export class OrderInputDetailsComponent implements OnInit {
     fb: FormBuilder,
     private orderLinesService: OrderLinesService,
     skuService: SkuService,
-    private store: Store<AppState>
+    private store: Store<{}>
     ) {
     this.form = fb.group({
       qty: [null, [Validators.required, Validators.min(1)]],

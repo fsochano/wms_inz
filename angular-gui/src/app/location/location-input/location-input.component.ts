@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LocationService } from '../location.service';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.reducer';
 import { LocationType } from '../store/location.model';
 
 @Component({
@@ -21,7 +20,7 @@ export class LocationInputComponent implements OnInit {
   constructor(
     fb: FormBuilder,
     private service: LocationService,
-    private store: Store<AppState>
+    private store: Store<{}>
   ) {
     this.form = fb.group({
       name: [null, [Validators.required,]],

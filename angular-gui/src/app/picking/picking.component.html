@@ -10,8 +10,8 @@
         <ng-container matColumnDef="bt-details">
             <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let element">
-                <button mat-raised-button color="primary" [routerLink]="['../picking', element.id]"
-                    [disabled]="isDisabled(element)">
+                <button mat-raised-button color="primary" [routerLink]="['../picking', element.id]">
+                    <!-- [disabled]="isDisabled(element)" -->
                     Open
                 </button>
             </td>

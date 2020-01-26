@@ -35,7 +35,7 @@ public class ContainerService {
         Location location = locationRepository.findById(params.locationId)
                 .orElseThrow(LocationNotFoundException::new);
 
-        if(location.freeCapacity < params.containerSize) {
+        if(location.getFreeCapacity() < params.containerSize) {
             throw new NotEnoughSpaceInLocationException();
         }
 
@@ -50,7 +50,7 @@ public class ContainerService {
         Container container = containerRepository.findById(containerId)
                 .orElseThrow(ContainerNotFoundException::new);
 
-        if(container.skuQty > 0) {
+        if(container.getSkuQty() > 0) {
             throw new NotEmptyContainerException();
         }
 

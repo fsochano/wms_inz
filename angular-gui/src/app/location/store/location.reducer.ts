@@ -12,6 +12,8 @@ const initialState: LocationsState = LocationsAdapter.getInitialState();
 
 export const LocationsReducer = createReducer(
     initialState,
+    on(LocationsActions.locationsRequested,
+        state => LocationsAdapter.removeAll(state)),
     on(LocationsActions.locationsLoaded,
         (state, { locations }) => LocationsAdapter.addAll(locations, state)),
     on(LocationsActions.locationCreated,

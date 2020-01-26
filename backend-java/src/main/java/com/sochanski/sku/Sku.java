@@ -1,8 +1,13 @@
 package com.sochanski.sku;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "sku")
 public class Sku {
@@ -10,14 +15,12 @@ public class Sku {
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="sku_id_gen")
     @SequenceGenerator(name="sku_id_gen", sequenceName="sku_id_gen", allocationSize=1)
-    public long id;
+    private long id;
 
     @NotEmpty
-    public String name;
+    private String name;
 
-    public String description;
-
-    public Sku() {}
+    private String description;
 
     public Sku(String name) {
         this.name = name;

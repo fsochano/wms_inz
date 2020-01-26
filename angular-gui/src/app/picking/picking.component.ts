@@ -1,5 +1,9 @@
+import { ColumnSchema } from './../shared/column-schema.model';
+import { PickListsSelectors } from './store/pick-lists.selector';
+import { PickListsActions } from './store/pick-lists.actions';
 import { Component, OnInit } from '@angular/core';
-import { of } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { PickList } from './pick-lists.model';
 
 @Component({
   selector: 'app-picking',
@@ -8,26 +12,24 @@ import { of } from 'rxjs';
 })
 export class PickingComponent implements OnInit {
 
-  columnSchema = [
+  columnSchema: ColumnSchema<PickList>[] = [
     { name: 'Id', param: 'id' },
     { name: 'Status', param: 'status' },
   ];
   displayedColumns = [...this.columnSchema.map(s => s.param), 'bt-details'];
 
-  pickTasks$ = of([
-    { id: 123, status: 'RELEASED' },
-    { id: 124, status: 'IN_PROGRESS' },
-    { id: 125, status: 'COMPLETED' },
-    { id: 126, status: 'SHIPPED' },
-  ]);
+  pickTasks$ = this.store.select(PickListsSelectors.selectAllPickLists);
 
-  constructor() { }
+  constructor(
+    private readonly store: Store<{}>,
+  ) { }
 
   ngOnInit() {
+    this.store.dispatch(PickListsActions.pickListsRequested());
   }
 
-  isDisabled(elem: { status: string }) {
-    return elem.status === 'COMPLETED' || elem.status === 'SHIPPED';
-  }
+  // isDisabled(elem: PickList) {
+  //   return elem.status === 'COMPLETED' || elem.status === 'SHIPPED';
+  // }
 
 }

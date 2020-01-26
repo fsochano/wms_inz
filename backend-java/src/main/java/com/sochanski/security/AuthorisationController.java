@@ -30,16 +30,16 @@ public class AuthorisationController {
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Valid UserLoginParams userLoginParams) {
         try {
-            Authentication a = service.authenticate(new UsernamePasswordAuthenticationToken(userLoginParams.username, userLoginParams.password));
+            Authentication a = service.authenticate(new UsernamePasswordAuthenticationToken(userLoginParams.getUsername(), userLoginParams.getPassword()));
             if(a.isAuthenticated()) {
-                String preToken = userLoginParams.username+":"+ userLoginParams.password;
+                String preToken = userLoginParams.getUsername()+":"+ userLoginParams.getPassword();
                 String token = "Basic " + Base64.getEncoder().encodeToString(preToken.getBytes());
                 List<String> roles = a.getAuthorities()
                         .stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toList());
 
-                return ResponseEntity.ok(new UserDTO(1L, userLoginParams.username, token, roles));
+                return ResponseEntity.ok(new UserDTO(1L, userLoginParams.getUsername(), token, roles));
             }
             return ResponseEntity.status(401).build();
         } catch(AuthenticationException e) {

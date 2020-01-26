@@ -11,6 +11,8 @@ export interface Order {
     id: number;
     name: string;
     status: OrderStatus;
+    lastChangeBy: string;
+    lastChangeDate: string;
 }
 
 export interface OrderLine {

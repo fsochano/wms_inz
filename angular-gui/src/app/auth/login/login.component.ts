@@ -1,5 +1,4 @@
 import { AuthActions } from './../auth.action';
-import { AppState } from './../../app.reducer';
 import { AuthService } from './../auth.service';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -19,7 +18,7 @@ export class LoginComponent {
     fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
-    private store: Store<AppState>) {
+    private store: Store<{}>) {
     this.form = fb.group({
       email: ['admin', [Validators.required]],
       password: ['password', [Validators.required]]

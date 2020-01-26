@@ -1,7 +1,6 @@
 import { AuthActions } from './auth/auth.action';
 import { AuthSelectors } from './auth/auth.selectror';
 import { Component, OnInit } from '@angular/core';
-import { AppState } from './app.reducer';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -16,7 +15,7 @@ export class AppComponent implements OnInit {
   isUserLogged$: Observable<boolean> = this.store.select(AuthSelectors.isLoggedIn);
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<{}>
   ) {
   }
 

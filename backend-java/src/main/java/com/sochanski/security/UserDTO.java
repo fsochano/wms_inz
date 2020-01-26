@@ -1,17 +1,15 @@
 package com.sochanski.security;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.util.List;
 
+@Data
+@AllArgsConstructor
 public class UserDTO {
-    public long id;
-    public String name;
-    public String token;
-    public List<String> authorities;
-
-    public UserDTO(long id, String name, String token, List<String> authorities) {
-        this.id = id;
-        this.name = name;
-        this.token = token;
-        this.authorities = authorities;
-    }
+    private long id;
+    private String name;
+    private String token;
+    private List<String> authorities;
 }

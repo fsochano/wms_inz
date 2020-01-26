@@ -1,12 +1,9 @@
-import { WarehouseLocation } from './../../location/store/location.model';
 import { Sku } from './../../sku/store/sku.model';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { LocationService } from 'src/app/location/location.service';
-import { SkuService } from 'src/app/sku/sku.service';
+import { SkuService } from '../../sku/sku.service';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.reducer';
 import { ContainersActions } from '../store/containers.actions';
 import { ContainerService } from '../container.service';
 
@@ -29,7 +26,7 @@ export class ContainerInputComponent implements OnInit {
     fb: FormBuilder,
     private containerService: ContainerService,
     skuService: SkuService,
-    private store: Store<AppState>
+    private store: Store<{}>
     ) {
     this.form = fb.group({
       containerSize: [null, [Validators.required, Validators.min(1)]],

@@ -10,6 +10,7 @@ import com.sochanski.order.OrderLineRepository;
 import com.sochanski.order.data.OrderHeader;
 import com.sochanski.order.data.OrderHeaderStatus;
 import com.sochanski.order.data.OrderLine;
+import com.sochanski.pick.*;
 import com.sochanski.sku.Sku;
 import com.sochanski.sku.SkuRepository;
 import org.slf4j.Logger;
@@ -33,6 +34,8 @@ public class TestDataLoader implements CommandLineRunner {
     private final SkuRepository skuRepository;
     private final LocationRepository locationRepository;
     private final ContainerRepository containerRepository;
+    private final PickListRepository pickListRepository;
+    private final PickTaskRepository pickTaskRepository;
 
 
     @Autowired
@@ -40,23 +43,25 @@ public class TestDataLoader implements CommandLineRunner {
                           OrderLineRepository orderLineRepository,
                           SkuRepository skuRepository,
                           LocationRepository locationRepository,
-                          ContainerRepository containerRepository) {
+                          ContainerRepository containerRepository,
+                          PickListRepository pickListRepository,
+                          PickTaskRepository pickTaskRepository) {
         this.orderHeaderRepository = orderHeaderRepository;
         this.orderLineRepository = orderLineRepository;
         this.skuRepository = skuRepository;
         this.locationRepository = locationRepository;
         this.containerRepository = containerRepository;
+        this.pickListRepository = pickListRepository;
+        this.pickTaskRepository = pickTaskRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        List<Location> locationList = locationRepository.saveAll(List.of(
-                new Location("REG1241", LocationType.STORAGE, 15),
-                new Location("REG1242", LocationType.STORAGE, 5),
-                new Location("REG1244", LocationType.STORAGE, 15),
-                new Location("INBOUND01", LocationType.INBOUND, 3),
-                new Location("SHIPDOCK01", LocationType.SHIPDOCK, 2)
-        ));
+        Location reg1241 = locationRepository.save(new Location("REG1241", LocationType.STORAGE, 15));
+        Location reg1242 = locationRepository.save(new Location("REG1242", LocationType.STORAGE, 5));
+        Location reg1244 = locationRepository.save(new Location("REG1244", LocationType.STORAGE, 15));
+        Location inbound01 = locationRepository.save(new Location("INBOUND01", LocationType.INBOUND, 3));
+        Location shipdock01 = locationRepository.save(new Location("SHIPDOCK01", LocationType.SHIPDOCK, 10));
 
         List<Sku> skuList = skuRepository.saveAll(List.of(
                 new Sku("pantalony"),
@@ -70,9 +75,15 @@ public class TestDataLoader implements CommandLineRunner {
                 new Sku("pończochy")
         ));
 
-        List<Container> containerList = containerRepository.saveAll(List.of(
-                new Container(locationList.get(0), 5, skuList.get(0), 100, 100)
-        ));
+        Container pantalonyReg1241 = containerRepository.save(new Container(reg1241, 5, skuList.get(0), 100, 100));
+
+        Container zupanReg1241 = containerRepository.save(new Container(reg1241, 1, skuList.get(4), 100, 100));
+        Container kaszkietReg1241 = containerRepository.save(new Container(reg1241, 1, skuList.get(5), 100, 100));
+        Container zupanShipdock01 = containerRepository.save(new Container(shipdock01, 1, skuList.get(4), 0, 100));
+        Container kaszkietShipdock01 = containerRepository.save(new Container(shipdock01, 1, skuList.get(5), 0, 100));
+
+        Container krynolinaReg1242 = containerRepository.save(new Container(reg1242, 1, skuList.get(1), 50, 100));
+        Container krynolinaShipdock01 = containerRepository.save(new Container(shipdock01, 1, skuList.get(1), 50, 100));
 
         OrderHeader orderHeader = orderHeaderRepository.save(new OrderHeader("order-1", OrderHeaderStatus.HOLD, emptyList()));
         orderLineRepository.saveAll(List.of(
@@ -82,24 +93,33 @@ public class TestDataLoader implements CommandLineRunner {
         ));
 
         orderHeader = orderHeaderRepository.save(new OrderHeader("order-2", OrderHeaderStatus.RELEASED, emptyList()));
-        orderLineRepository.saveAll(List.of(
-                new OrderLine(1L, skuList.get(4), orderHeader),
-                new OrderLine(2L, skuList.get(5), orderHeader)
-        ));
+        OrderLine zupanOL = orderLineRepository.save(new OrderLine(1L, skuList.get(4), orderHeader));
+        OrderLine kaszkietOL = orderLineRepository.save(new OrderLine(2L, skuList.get(5), orderHeader));
 
+        PickList pickList = pickListRepository.save(new PickList(orderHeader));
+        pickTaskRepository.save(new PickTask(pickList, zupanOL, PickTaskStatus.READY, zupanOL.getQty(), zupanReg1241, zupanShipdock01));
+        pickTaskRepository.save(new PickTask(pickList, kaszkietOL, PickTaskStatus.READY, kaszkietOL.getQty(), kaszkietReg1241, kaszkietShipdock01));
 
         orderHeader = orderHeaderRepository.save(new OrderHeader("order-3", OrderHeaderStatus.COMPLETED, emptyList()));
-        orderLineRepository.saveAll(List.of(
-                new OrderLine(1L, skuList.get(1), orderHeader)
-        ));
+        OrderLine krynolinaOL = orderLineRepository.save(new OrderLine(50L, skuList.get(1), orderHeader));
+
+        pickList = pickListRepository.save(new PickList(orderHeader, PickListStatus.COMPLETED));
+        pickTaskRepository.save(new PickTask(pickList, krynolinaOL, PickTaskStatus.COMPLETED, krynolinaOL.getQty(), krynolinaReg1242, krynolinaShipdock01));
 
         orderHeader = orderHeaderRepository.save(new OrderHeader("order-3", OrderHeaderStatus.SHIPPED, emptyList()));
+        OrderLine ponczochyOL = orderLineRepository.save(new OrderLine(50L, skuList.get(8), orderHeader));
 
-        Location l = locationList.get(0);
-        long locationFreeCapacity = locationRepository.findLocationFreeCapacity(l.id).get();
-        long locationUsedCapacity = locationRepository.findLocationUsedCapacity(l.id).get();
-        log.info("Free capacity of {} location equal {}", l.name, locationFreeCapacity);
-        log.info("Used capacity of {} location equal {}", l.name, locationUsedCapacity);
+        pickList = pickListRepository.save(new PickList(orderHeader, PickListStatus.SHIPPED));
+        pickTaskRepository.save(new PickTask(pickList, ponczochyOL, PickTaskStatus.SHIPPED, ponczochyOL.getQty()));
+
+        printLocationCapacity(reg1241);
+    }
+
+    private void printLocationCapacity(Location reg1241) {
+        long locationFreeCapacity = locationRepository.findLocationFreeCapacity(reg1241.getId()).get();
+        long locationUsedCapacity = locationRepository.findLocationUsedCapacity(reg1241.getId()).get();
+        log.info("Free capacity of {} location equal {}", reg1241.getName(), locationFreeCapacity);
+        log.info("Used capacity of {} location equal {}", reg1241.getName(), locationUsedCapacity);
     }
 
 }
