@@ -1,26 +1,53 @@
 package com.sochanski.pick;
 
+import com.sochanski.container.Container;
+import com.sochanski.container.ContainerRepository;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 public class PickTaskService {
 
     private final PickTaskRepository repository;
     private final PickListService pickListService;
+    private final ContainerRepository containerRepository;
 
-    public PickTaskService(PickTaskRepository repository, PickListService pickListService) {
+    public PickTaskService(PickTaskRepository repository,
+                           PickListService pickListService,
+                           ContainerRepository containerRepository) {
         this.repository = repository;
         this.pickListService = pickListService;
+        this.containerRepository = containerRepository;
     }
 
-    public PickTask pickPickTask(long pickTaskId) {
-        return changePickTaskStatus(pickTaskId, PickTaskStatus.READY, PickTaskStatus.PICKED);
+    @Transactional
+    public PickTask pick(long pickTaskId) {
+        PickTask pickTask = changePickTaskStatus(pickTaskId, PickTaskStatus.READY, PickTaskStatus.PICKED);
+        Container fromContainer = pickTask.getFromContainer();
+        if(fromContainer.getSkuQty() < pickTask.getQty()) {
+            throw new InsufficientQuantityException();
+        }
+        fromContainer.setSkuQty(fromContainer.getSkuQty() - pickTask.getQty());
+        containerRepository.save(fromContainer);
+        return pickTask;
     }
 
-    public PickTask completePickTask(long pickTaskId) {
-        return changePickTaskStatus(pickTaskId, PickTaskStatus.PICKED, PickTaskStatus.COMPLETED);
+    @Transactional
+    public PickTask complete(long pickTaskId) {
+        PickTask pickTask = changePickTaskStatus(pickTaskId, PickTaskStatus.PICKED, PickTaskStatus.COMPLETED);
+        Container toContainer = pickTask.getToContainer();
+        long newSkuQuantity = toContainer.getSkuQty() + pickTask.getQty();
+        if(toContainer.getSkuCapacity() < newSkuQuantity) {
+            throw new NotEnoughSpaceInContainerException();
+        }
+        toContainer.setSkuQty(newSkuQuantity);
+        containerRepository.save(toContainer);
+        return pickTask;
     }
 
+
+    @Transactional
     public PickTask changePickTaskStatus(long pickTaskId, PickTaskStatus status) {
         return changePickTaskStatus(pickTaskId, findPickFromPickStatus(status), status);
     }

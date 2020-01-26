@@ -16,11 +16,11 @@ export class PickTaskComponent implements OnInit {
 
   columnSchema: ColumnSchema<PickTask>[] = [
     { param: 'id', name: 'Id' },
-    { param: 'fromLocation', name: 'Source location' },
-    { param: 'fromContainer', name: 'Source container' },
+    { param: 'fromLocationName', name: 'Source location' },
+    { param: 'fromContainerId', name: 'Source container' },
     { param: 'qty', name: 'Quantity to pick' },
-    { param: 'toLocation', name: 'Destination location' },
-    { param: 'toContainer', name: 'Destination container' },
+    { param: 'toLocationName', name: 'Destination location' },
+    { param: 'toContainerId', name: 'Destination container' },
   ];
   displayedColumns = [...this.columnSchema.map(s => s.param), 'bt-actions'];
 

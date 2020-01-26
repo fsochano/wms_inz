@@ -4,8 +4,8 @@ export interface PickTask {
     id: number;
     qty: number,
     status: PickTaskStatus
-    fromLocation?: string,
-    fromContainer?: number,
-    toLocation?: string,
-    toContainer?: number,
+    fromLocationName?: string,
+    fromContainerId?: number,
+    toLocationName?: string,
+    toContainerId?: number,
 }

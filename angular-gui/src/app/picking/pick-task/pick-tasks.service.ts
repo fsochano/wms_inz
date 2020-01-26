@@ -21,10 +21,10 @@ export class PickTasksService {
   }
 
   pickPickTask(id: number): Observable<PickTask> {
-    return this.http.post<PickTask>(`/api/pick-tasks/${id}/status`, { status: 'PICKED' });
+    return this.http.post<PickTask>(`/api/pick-tasks/${id}/pick`, { status: 'PICKED' });
   }
 
   completePickTask(id: number): Observable<PickTask> {
-    return this.http.post<PickTask>(`/api/pick-tasks/${id}/status`, { status: 'COMPLETED' });
+    return this.http.post<PickTask>(`/api/pick-tasks/${id}/complete`, { status: 'COMPLETED' });
   }
 }

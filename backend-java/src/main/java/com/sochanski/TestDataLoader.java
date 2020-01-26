@@ -57,11 +57,11 @@ public class TestDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Location reg1241 = locationRepository.save(new Location("REG1241", LocationType.STORAGE, 15));
-        Location reg1242 = locationRepository.save(new Location("REG1242", LocationType.STORAGE, 5));
-        Location reg1244 = locationRepository.save(new Location("REG1244", LocationType.STORAGE, 15));
-        Location inbound01 = locationRepository.save(new Location("INBOUND01", LocationType.INBOUND, 3));
-        Location shipdock01 = locationRepository.save(new Location("SHIPDOCK01", LocationType.SHIPDOCK, 10));
+        Location reg1241 = createLocation("REG1241", LocationType.STORAGE, 15);
+        Location reg1242 = createLocation("REG1242", LocationType.STORAGE, 5);
+        Location reg1244 = createLocation("REG1244", LocationType.STORAGE, 15);
+        Location inbound01 = createLocation("INBOUND01", LocationType.INBOUND, 3);
+        Location shipdock01 = createLocation("SHIPDOCK01", LocationType.SHIPDOCK, 10);
 
         List<Sku> skuList = skuRepository.saveAll(List.of(
                 new Sku("pantalony"),
@@ -74,45 +74,70 @@ public class TestDataLoader implements CommandLineRunner {
                 new Sku("rękawiczki"),
                 new Sku("pończochy")
         ));
+        Sku pantalonySku = skuList.get(0);
+        Sku zupanSku = skuList.get(4);
+        Sku kaszkietSku = skuList.get(5);
+        Sku krynolinaSku = skuList.get(1);
+        Sku ponczochySku = skuList.get(8);
 
-        Container pantalonyReg1241 = containerRepository.save(new Container(reg1241, 5, skuList.get(0), 100, 100));
+        Container pantalonyReg1241 = createContainer(reg1241, 5, pantalonySku, 100, 100);
 
-        Container zupanReg1241 = containerRepository.save(new Container(reg1241, 1, skuList.get(4), 100, 100));
-        Container kaszkietReg1241 = containerRepository.save(new Container(reg1241, 1, skuList.get(5), 100, 100));
-        Container zupanShipdock01 = containerRepository.save(new Container(shipdock01, 1, skuList.get(4), 0, 100));
-        Container kaszkietShipdock01 = containerRepository.save(new Container(shipdock01, 1, skuList.get(5), 0, 100));
+        Container zupanReg1241 = createContainer(reg1241, 1, zupanSku, 100, 100);
+        Container kaszkietReg1241 = createContainer(reg1241, 1, kaszkietSku, 100, 100);
+        Container zupanShipdock01 = createContainer(shipdock01, 1, zupanSku, 0, 100);
+        Container kaszkietShipdock01 = createContainer(shipdock01, 1, kaszkietSku, 0, 100);
 
-        Container krynolinaReg1242 = containerRepository.save(new Container(reg1242, 1, skuList.get(1), 50, 100));
-        Container krynolinaShipdock01 = containerRepository.save(new Container(shipdock01, 1, skuList.get(1), 50, 100));
+        Container krynolinaReg1242 = createContainer(reg1242, 1, krynolinaSku, 50, 100);
+        Container krynolinaShipdock01 = createContainer(shipdock01, 1, krynolinaSku, 50, 100);
 
-        OrderHeader orderHeader = orderHeaderRepository.save(new OrderHeader("order-1", OrderHeaderStatus.HOLD, emptyList()));
+        OrderHeader orderHeader = createOrderHeader("order-1", OrderHeaderStatus.HOLD);
         orderLineRepository.saveAll(List.of(
-                new OrderLine(1L, skuList.get(0), orderHeader),
-                new OrderLine(2L, skuList.get(1), orderHeader),
+                new OrderLine(1L, pantalonySku, orderHeader),
+                new OrderLine(2L, krynolinaSku, orderHeader),
                 new OrderLine(3L, skuList.get(2), orderHeader)
         ));
 
-        orderHeader = orderHeaderRepository.save(new OrderHeader("order-2", OrderHeaderStatus.RELEASED, emptyList()));
-        OrderLine zupanOL = orderLineRepository.save(new OrderLine(1L, skuList.get(4), orderHeader));
-        OrderLine kaszkietOL = orderLineRepository.save(new OrderLine(2L, skuList.get(5), orderHeader));
+        orderHeader = createOrderHeader("order-2", OrderHeaderStatus.RELEASED);
+        OrderLine zupanOL = createOrderLine(zupanSku, orderHeader, 30L);
+        OrderLine kaszkietOL = createOrderLine(kaszkietSku, orderHeader, 45L);
 
         PickList pickList = pickListRepository.save(new PickList(orderHeader));
-        pickTaskRepository.save(new PickTask(pickList, zupanOL, PickTaskStatus.READY, zupanOL.getQty(), zupanReg1241, zupanShipdock01));
-        pickTaskRepository.save(new PickTask(pickList, kaszkietOL, PickTaskStatus.READY, kaszkietOL.getQty(), kaszkietReg1241, kaszkietShipdock01));
+        createPickTask(zupanReg1241, zupanShipdock01, zupanOL, pickList, PickTaskStatus.READY);
+        createPickTask(kaszkietReg1241, kaszkietShipdock01, kaszkietOL, pickList, PickTaskStatus.READY);
 
-        orderHeader = orderHeaderRepository.save(new OrderHeader("order-3", OrderHeaderStatus.COMPLETED, emptyList()));
-        OrderLine krynolinaOL = orderLineRepository.save(new OrderLine(50L, skuList.get(1), orderHeader));
+        orderHeader = createOrderHeader("order-3", OrderHeaderStatus.COMPLETED);
+        OrderLine krynolinaOL = createOrderLine(krynolinaSku, orderHeader, 50L);
 
         pickList = pickListRepository.save(new PickList(orderHeader, PickListStatus.COMPLETED));
-        pickTaskRepository.save(new PickTask(pickList, krynolinaOL, PickTaskStatus.COMPLETED, krynolinaOL.getQty(), krynolinaReg1242, krynolinaShipdock01));
+        createPickTask(krynolinaReg1242, krynolinaShipdock01, krynolinaOL, pickList, PickTaskStatus.COMPLETED);
 
-        orderHeader = orderHeaderRepository.save(new OrderHeader("order-3", OrderHeaderStatus.SHIPPED, emptyList()));
-        OrderLine ponczochyOL = orderLineRepository.save(new OrderLine(50L, skuList.get(8), orderHeader));
+        orderHeader = createOrderHeader("order-3", OrderHeaderStatus.SHIPPED);
+        OrderLine ponczochyOL = createOrderLine(ponczochySku, orderHeader, 50L);
 
         pickList = pickListRepository.save(new PickList(orderHeader, PickListStatus.SHIPPED));
-        pickTaskRepository.save(new PickTask(pickList, ponczochyOL, PickTaskStatus.SHIPPED, ponczochyOL.getQty()));
+        pickTaskRepository.save(new PickTask(pickList, List.of(ponczochyOL), PickTaskStatus.SHIPPED, ponczochyOL.getQty()));
 
         printLocationCapacity(reg1241);
+    }
+
+    private void createPickTask(Container from, Container to, OrderLine ol, PickList pickList, PickTaskStatus status) {
+        pickTaskRepository.save(new PickTask(pickList, List.of(ol), status, ol.getQty(), from, to));
+    }
+
+    private OrderLine createOrderLine(Sku sku, OrderHeader orderHeader, long quantity) {
+        return orderLineRepository.save(new OrderLine(quantity, sku, orderHeader));
+    }
+
+    private OrderHeader createOrderHeader(String name, OrderHeaderStatus status) {
+        return orderHeaderRepository.save(new OrderHeader(name, status, emptyList()));
+    }
+
+    private Container createContainer(Location location, int containerCapacity, Sku sku, int skuQuantity, int skuCapacity) {
+        return containerRepository.save(new Container(location, containerCapacity, sku, skuQuantity, skuCapacity));
+    }
+
+    private Location createLocation(String name, LocationType type, int capacity) {
+        return locationRepository.save(new Location(name, type, capacity));
     }
 
     private void printLocationCapacity(Location reg1241) {

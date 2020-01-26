@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -31,35 +32,35 @@ public class PickTask {
     private PickTaskStatus status;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "from_container_id")
     private Container fromContainer;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "to_container_id")
     private Container toContainer;
 
     @JsonIgnore
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_line_id", nullable = false)
-    private OrderLine orderLine;
+    private List<OrderLine> orderLine;
 
     public PickTask(PickList pickList,
-                    OrderLine orderLine,
+                    List<OrderLine> orderLine,
                     PickTaskStatus status,
                     long qty) {
         this(pickList, orderLine, status, qty, null, null);
     }
 
     public PickTask(PickList pickList,
-                    OrderLine orderLine,
+                    List<OrderLine> orderLine,
                     PickTaskStatus status,
                     long qty,
                     Container fromContainer,
                     Container toContainer) {
         this.pickList = pickList;
-        this.orderLine = orderLine;
+        this.orderLine = List.copyOf(orderLine);
         this.status = status;
         this.qty = qty;
         this.fromContainer = fromContainer;
@@ -68,25 +69,25 @@ public class PickTask {
 
     @JsonProperty
     @Transient
-    public Long getFromContainer() {
+    public Long getFromContainerId() {
         return fromContainer != null ? fromContainer.getId() : null;
     }
 
     @JsonProperty
     @Transient
-    public String getFromLocation() {
+    public String getFromLocationName() {
         return fromContainer != null ? fromContainer.getLocation().getName() : null;
     }
 
     @JsonProperty
     @Transient
-    public Long getToContainer() {
+    public Long getToContainerId() {
         return toContainer != null ? toContainer.getId() : null;
     }
 
     @JsonProperty
     @Transient
-    public String getToLocation() {
+    public String getToLocationName() {
         return toContainer != null ? toContainer.getLocation().getName() : null;
     }
 
