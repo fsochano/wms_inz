@@ -8,7 +8,8 @@ import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
-@Entity(name="app_authority")
+@Entity
+@Table(name = "app_authority")
 @IdClass(AppAuthorityId.class)
 public class AppAuthority implements GrantedAuthority {
 

@@ -48,6 +48,11 @@ public class PickTask extends Auditable {
     @JoinColumn(name = "order_line_id", nullable = false, updatable = false)
     private OrderLine orderLine;
 
+//    @JsonIgnore
+//    @ManyToOne(optional = false)
+//    @JoinColumn(name = "sku_id", nullable = false, updatable = false)
+//    private Sku sku;
+
     public PickTask(PickList pickList,
                     OrderLine orderLine,
                     PickTaskStatus status,
@@ -63,6 +68,7 @@ public class PickTask extends Auditable {
                     Container toContainer) {
         this.pickList = pickList;
         this.orderLine = orderLine;
+//        this.sku = orderLine.getSku();
         this.status = status;
         this.qty = qty;
         this.fromContainer = fromContainer;

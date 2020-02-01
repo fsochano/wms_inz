@@ -33,5 +33,5 @@ spring:
 #        SQL: DEBUG
 application:
   load-test-data: true
-  load-sql-constraints: false
+  load-sql-constraints: true
   load-sql-data: false

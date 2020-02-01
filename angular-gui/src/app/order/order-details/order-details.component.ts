@@ -9,7 +9,7 @@ import { OrdersService } from '../orders.service';
 import { OrderLinesActions } from '../store/order-lines.actions';
 import { OrderLinesService } from '../order-lines.service';
 import { OrdersActions } from '../store/orders.actions';
-import { map, tap, filter } from 'rxjs/operators';
+import { map, tap, filter, startWith } from 'rxjs/operators';
 import { OrdersSelectors } from '../store/orders.selector';
 
 @Component({
@@ -32,6 +32,10 @@ export class OrderDetailsComponent implements OnInit {
 
   order$: Observable<Order> = this.store.select(OrdersSelectors.selectOrder(this.orderId)).pipe(
     filter(o => o !== undefined),
+  );
+  isDisabled$: Observable<boolean> = this.order$.pipe(
+    map(o => o.status !== 'HOLD'),
+    startWith(true),
   );
   orderName$: Observable<string> = this.order$.pipe(
     map(order => order.name),

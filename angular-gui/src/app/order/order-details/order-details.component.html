@@ -5,28 +5,26 @@
   <div sidenav class="side-nav">
     <button mat-raised-button routerLink="../" routerLinkActive="active">Back</button>
     <app-order-properties [order]="order$ | async"></app-order-properties>
-    <button mat-raised-button (click)="releaseOrder()">Release</button>
+    <button mat-raised-button [disabled]="isDisabled$ | async" (click)="releaseOrder()">Release</button>
     <mat-accordion>
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>Create order line</mat-panel-title>
         </mat-expansion-panel-header>
-        <app-order-input-details [order]="order$| async"></app-order-input-details>
+        <app-order-input-details [order]="order$ | async"></app-order-input-details>
       </mat-expansion-panel>
     </mat-accordion>
+
   </div>
 
   <table mat-table content [dataSource]="orderLines$ | async">
 
-    <app-simple-schema-column
-      *ngFor="let column of columnSchema"
-      [column]="column"
-    ></app-simple-schema-column>
+    <app-simple-schema-column *ngFor="let column of columnSchema" [column]="column"></app-simple-schema-column>
 
     <ng-container matColumnDef="bt-actions">
       <th mat-header-cell *matHeaderCellDef> Actions </th>
       <td mat-cell *matCellDef="let orderLine">
-        <button mat-raised-button (click)="removeOrderLine(orderLine)">
+        <button mat-raised-button [disabled]="isDisabled$ | async" (click)="removeOrderLine(orderLine)">
           Remove
         </button>
       </td>
