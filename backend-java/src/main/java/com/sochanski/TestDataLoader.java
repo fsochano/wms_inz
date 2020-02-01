@@ -2,6 +2,7 @@ package com.sochanski;
 
 import com.sochanski.container.Container;
 import com.sochanski.container.ContainerRepository;
+import com.sochanski.container.ContainerType;
 import com.sochanski.location.Location;
 import com.sochanski.location.LocationRepository;
 import com.sochanski.location.LocationType;
@@ -29,6 +30,7 @@ import static java.util.Collections.emptyList;
 public class TestDataLoader implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(TestDataLoader.class);
 
+    private final ApplicationProperties applicationProperties;
     private final OrderHeaderRepository orderHeaderRepository;
     private final OrderLineRepository orderLineRepository;
     private final SkuRepository skuRepository;
@@ -39,13 +41,15 @@ public class TestDataLoader implements CommandLineRunner {
 
 
     @Autowired
-    public TestDataLoader(OrderHeaderRepository orderHeaderRepository,
+    public TestDataLoader(ApplicationProperties applicationProperties,
+                          OrderHeaderRepository orderHeaderRepository,
                           OrderLineRepository orderLineRepository,
                           SkuRepository skuRepository,
                           LocationRepository locationRepository,
                           ContainerRepository containerRepository,
                           PickListRepository pickListRepository,
                           PickTaskRepository pickTaskRepository) {
+        this.applicationProperties = applicationProperties;
         this.orderHeaderRepository = orderHeaderRepository;
         this.orderLineRepository = orderLineRepository;
         this.skuRepository = skuRepository;
@@ -57,6 +61,10 @@ public class TestDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        if(!applicationProperties.isLoadTestData()){
+            return;
+        }
+        log.info("Test data loading started");
         Location reg1241 = createLocation("REG1241", LocationType.STORAGE, 15);
         Location reg1242 = createLocation("REG1242", LocationType.STORAGE, 5);
         Location reg1244 = createLocation("REG1244", LocationType.STORAGE, 15);
@@ -80,15 +88,15 @@ public class TestDataLoader implements CommandLineRunner {
         Sku krynolinaSku = skuList.get(1);
         Sku ponczochySku = skuList.get(8);
 
-        Container pantalonyReg1241 = createContainer(reg1241, 5, pantalonySku, 100, 100);
+        Container pantalonyReg1241 = createContainer(ContainerType.STORAGE, reg1241, 5, pantalonySku, 100, 100);
 
-        Container zupanReg1241 = createContainer(reg1241, 1, zupanSku, 100, 100);
-        Container kaszkietReg1241 = createContainer(reg1241, 1, kaszkietSku, 100, 100);
-        Container zupanShipdock01 = createContainer(shipdock01, 1, zupanSku, 0, 100);
-        Container kaszkietShipdock01 = createContainer(shipdock01, 1, kaszkietSku, 0, 100);
+        Container zupanReg1241 = createContainer(ContainerType.STORAGE, reg1241, 1, zupanSku, 100, 100);
+        Container kaszkietReg1241 = createContainer(ContainerType.STORAGE, reg1241, 1, kaszkietSku, 100, 100);
+        Container zupanShipdock01 = createContainer(ContainerType.SHIPPING, shipdock01, 1, zupanSku, 0, 100);
+        Container kaszkietShipdock01 = createContainer(ContainerType.SHIPPING, shipdock01, 1, kaszkietSku, 0, 100);
 
-        Container krynolinaReg1242 = createContainer(reg1242, 1, krynolinaSku, 50, 100);
-        Container krynolinaShipdock01 = createContainer(shipdock01, 1, krynolinaSku, 50, 100);
+        Container krynolinaReg1242 = createContainer(ContainerType.STORAGE, reg1242, 1, krynolinaSku, 50, 100);
+        Container krynolinaShipdock01 = createContainer(ContainerType.SHIPPING, shipdock01, 1, krynolinaSku, 50, 100, 50);
 
         OrderHeader orderHeader = createOrderHeader("order-1", OrderHeaderStatus.HOLD);
         orderLineRepository.saveAll(List.of(
@@ -115,13 +123,19 @@ public class TestDataLoader implements CommandLineRunner {
         OrderLine ponczochyOL = createOrderLine(ponczochySku, orderHeader, 50L);
 
         pickList = pickListRepository.save(new PickList(orderHeader, PickListStatus.SHIPPED));
-        pickTaskRepository.save(new PickTask(pickList, List.of(ponczochyOL), PickTaskStatus.SHIPPED, ponczochyOL.getQty()));
+        pickTaskRepository.save(new PickTask(pickList, ponczochyOL, PickTaskStatus.SHIPPED, ponczochyOL.getQty()));
 
+        log.info("Test data loading ended");
         printLocationCapacity(reg1241);
     }
 
     private void createPickTask(Container from, Container to, OrderLine ol, PickList pickList, PickTaskStatus status) {
-        pickTaskRepository.save(new PickTask(pickList, List.of(ol), status, ol.getQty(), from, to));
+        pickTaskRepository.save(new PickTask(pickList, ol, status, ol.getQty(), from, to));
+        if(PickTaskStatus.PICKED.getOrder() > status.getOrder()) {
+            from.setAllocatedQty(ol.getQty());
+            from.setFreeQty(from.getFreeQty() - ol.getQty());
+            containerRepository.save(from);
+        }
     }
 
     private OrderLine createOrderLine(Sku sku, OrderHeader orderHeader, long quantity) {
@@ -132,8 +146,15 @@ public class TestDataLoader implements CommandLineRunner {
         return orderHeaderRepository.save(new OrderHeader(name, status, emptyList()));
     }
 
-    private Container createContainer(Location location, int containerCapacity, Sku sku, int skuQuantity, int skuCapacity) {
-        return containerRepository.save(new Container(location, containerCapacity, sku, skuQuantity, skuCapacity));
+    private Container createContainer(ContainerType type, Location location, int containerCapacity, Sku sku, int skuQuantity, int skuCapacity) {
+        return containerRepository.save(new Container(type, location, containerCapacity, sku, skuQuantity, skuCapacity));
+    }
+
+    private Container createContainer(ContainerType type, Location location, int containerCapacity, Sku sku, int skuQuantity, int skuCapacity, int allocted) {
+        Container container = new Container(type, location, containerCapacity, sku, skuQuantity, skuCapacity);
+        container.setAllocatedQty(allocted);
+        container.setFreeQty(skuQuantity - allocted);
+        return containerRepository.save(container);
     }
 
     private Location createLocation(String name, LocationType type, int capacity) {

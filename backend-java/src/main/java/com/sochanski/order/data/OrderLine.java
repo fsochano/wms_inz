@@ -1,18 +1,20 @@
 package com.sochanski.order.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sochanski.db.Auditable;
 import com.sochanski.sku.Sku;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "order_line")
-public class OrderLine {
+public class OrderLine extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_line_id_gen")
@@ -21,6 +23,8 @@ public class OrderLine {
 
     @Positive
     private long qty;
+    @PositiveOrZero
+    private long allocated;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sku_id", nullable = false, updatable = false)

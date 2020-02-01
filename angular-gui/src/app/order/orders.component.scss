@@ -1,7 +1,9 @@
+@import 'side-nav';
+@include side-nav-style();
+
+@import 'table';
+@include table-style();
+
 button {
   margin: 0.5rem;
-}
-
-table {
-  width: 100%;
 }

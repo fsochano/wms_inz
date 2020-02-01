@@ -4,11 +4,13 @@ import com.sochanski.ApiUtils;
 import com.sochanski.order.data.OrderLine;
 import com.sochanski.order.data.OrderLineParameters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
+@PreAuthorize(value ="hasAuthority('ORDERING')")
 @RestController
 @RequestMapping(path = ApiUtils.BASE_API_PATH + "/orders/{orderId}/order-lines")
 @CrossOrigin

@@ -3,7 +3,11 @@ import { ContainersActions } from './../../container/store/containers.actions';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { LocationsActions } from './location.actions';
 import { map, switchMap, startWith } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class LocationEffects {
 
     loadLocations$ = createEffect(() =>

@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 @CrossOrigin
 public class AuthorisationController {
 
-    private AuthenticationManager service;
+    private final AuthenticationManager service;
 
     @Autowired
-    AuthorisationController(AuthenticationManager service){
+    public AuthorisationController(AuthenticationManager service){
         this.service = service;
     }
 
@@ -39,11 +39,12 @@ public class AuthorisationController {
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toList());
 
-                return ResponseEntity.ok(new UserDTO(1L, userLoginParams.getUsername(), token, roles));
+                return ResponseEntity.ok(new LoggedInUser(userLoginParams.getUsername(), token, roles));
             }
             return ResponseEntity.status(401).build();
         } catch(AuthenticationException e) {
             return ResponseEntity.status(401).body(e.getMessage());
         }
     }
+
 }

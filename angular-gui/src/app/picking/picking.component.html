@@ -1,23 +1,27 @@
-<app-layout>
-    <h1 header>Picking</h1>
+<app-with-header-layout>
+  <h1 header>Picking</h1>
 
-    <table content mat-table [dataSource]="pickTasks$ | async">
-        <ng-container [matColumnDef]="column.param" *ngFor="let column of columnSchema">
-            <th mat-header-cell *matHeaderCellDef> {{ column.name }} </th>
-            <td mat-cell *matCellDef="let element"> {{ element[column.param] }} </td>
-        </ng-container>
+  <table content mat-table [dataSource]="pickTasks$ | async">
+    <app-simple-schema-column
+      *ngFor="let column of columnSchema"
+      [column]="column"
+    ></app-simple-schema-column>
 
-        <ng-container matColumnDef="bt-details">
-            <th mat-header-cell *matHeaderCellDef>Actions</th>
-            <td mat-cell *matCellDef="let element">
-                <button mat-raised-button color="primary" [routerLink]="['../picking', element.id]">
-                    <!-- [disabled]="isDisabled(element)" -->
-                    Open
-                </button>
-            </td>
-        </ng-container>
+    <ng-container matColumnDef="bt-details">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          mat-raised-button
+          color="primary"
+          [routerLink]="['../picking', element.id]"
+        >
+          <!-- [disabled]="isDisabled(element)" -->
+          Open
+        </button>
+      </td>
+    </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-</app-layout>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</app-with-header-layout>

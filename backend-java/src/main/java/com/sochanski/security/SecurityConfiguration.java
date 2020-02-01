@@ -15,6 +15,8 @@
  */
 package com.sochanski.security;
 
+import com.sochanski.security.user.AppAuthorityRepository;
+import com.sochanski.security.user.AppUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,47 +26,69 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private final AppUserRepository appUserRepository;
+    private final AppAuthorityRepository appAuthorityRepository;
+
+    public SecurityConfiguration(AppUserRepository appUserRepository, AppAuthorityRepository appAuthorityRepository) {
+        this.appUserRepository = appUserRepository;
+        this.appAuthorityRepository = appAuthorityRepository;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .headers().frameOptions().disable().and()
-            .csrf()
+                .headers().frameOptions().disable().and()
+                .csrf()
                 .disable()
-            .authorizeRequests()
+                .authorizeRequests()
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
-            .and()
+                .and()
                 .httpBasic()
-            .and()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("admin")
-                    .password("{noop}password")
-                    .authorities("ORDERING", "PICKING", "SHIPPING", "SETTINGS")
-                    .and()
-                .withUser("ordering")
-                    .password("{noop}password")
-                    .authorities("ORDERING")
-                    .and()
-                .withUser("picking")
-                    .password("{noop}password")
-                    .authorities("PICKING")
-                    .and()
-                .withUser("shipping")
-                    .password("{noop}password")
-                    .authorities("SHIPPING");
+        String password = passwordEncoder().encode("password");
+        AppUserDetailsManager userDetailsManager = userDetailsManager();
+
+        auth.userDetailsService(userDetailsManager)
+                .userDetailsPasswordManager(userDetailsManager)
+                .passwordEncoder(passwordEncoder());
+
+        userDetailsManager.createUser(
+                User.withUsername("admin")
+                        .password(password)
+                        .authorities("ORDERING", "PICKING", "SHIPPING", "SETTINGS")
+                        .build());
+        userDetailsManager.createUser(
+                User.withUsername("ordering")
+                        .password(password)
+                        .authorities("ORDERING")
+                        .build());
+        userDetailsManager.createUser(
+                User.withUsername("picking")
+                        .password(password)
+                        .authorities("PICKING")
+                        .build());
+        userDetailsManager.createUser(
+                User.withUsername("shipping")
+                        .password(password)
+                        .authorities("SHIPPING")
+                        .build());
     }
 
     @Bean
@@ -77,6 +101,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
+    @Bean
+    AppUserDetailsManager userDetailsManager() {
+        return new AppUserDetailsManager(appUserRepository, appAuthorityRepository, passwordEncoder());
     }
 
 }

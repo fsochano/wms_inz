@@ -2,6 +2,7 @@ package com.sochanski.pick;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sochanski.db.Auditable;
 import com.sochanski.order.data.OrderHeader;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ import static java.util.Collections.emptyList;
 @NoArgsConstructor
 @Entity
 @Table(name = "pick_list")
-public class PickList {
+public class PickList extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pick_list_id_gen")

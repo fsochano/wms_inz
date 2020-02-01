@@ -1,4 +1,4 @@
-import { ColumnSchema } from './../../shared/column-schema.model';
+import { ColumnSchema } from '../../shared/table/column-schema.model';
 import { PickTasksSelectors } from './store/pick-tasks.selector';
 import { PickTasksActions } from './store/pick-tasks.actions';
 import { PickTasksService } from './pick-tasks.service';
@@ -15,14 +15,17 @@ import { PickTask } from './pick-tasks.model';
 export class PickTaskComponent implements OnInit {
 
   columnSchema: ColumnSchema<PickTask>[] = [
-    { param: 'id', name: 'Id' },
-    { param: 'fromLocationName', name: 'Source location' },
-    { param: 'fromContainerId', name: 'Source container' },
-    { param: 'qty', name: 'Quantity to pick' },
-    { param: 'toLocationName', name: 'Destination location' },
-    { param: 'toContainerId', name: 'Destination container' },
+    { key: 'id', header: 'Id' },
+    { key: 'fromLocationName', header: 'Source location' },
+    { key: 'fromContainerId', header: 'Source container' },
+    { key: 'qty', header: 'Quantity to pick' },
+    { key: 'skuName', header: 'Sku name' },
+    { key: 'toLocationName', header: 'Destination location' },
+    { key: 'toContainerId', header: 'Destination container' },
+    { key: 'lastModifiedBy', header: 'Last Change By' },
+    { key: 'lastModifiedDate', header: 'Last Change Date' },
   ];
-  displayedColumns = [...this.columnSchema.map(s => s.param), 'bt-actions'];
+  displayedColumns = [...this.columnSchema.map(s => s.key), 'bt-actions'];
 
   moveTasks$ = this.store.select(PickTasksSelectors.selectAllPickTasks);
 

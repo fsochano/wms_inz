@@ -7,18 +7,19 @@ spring:
     multipart:
       maxFileSize: '100MB'
       max-request-size: '110MB'
-#  h2:
-#    console:
-#      enabled: true
+  h2:
+    console:
+      enabled: false
   jpa:
+    show-sql: false
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    generate-ddl: true
     hibernate:
       ddl-auto: create-drop
-    database-platform: org.hibernate.dialect.Oracle10gDialect
-#    show-sql: true
   datasource:
     url: 'jdbc:oracle:thin:@localhost:1521:WMS'
     username: FISO
-    password: password
+    password: asdf
     driver-class-name: oracle.jdbc.OracleDriver
     platform: oracle
     initialization-mode: always
@@ -30,3 +31,7 @@ spring:
 #    org:
 #      hibernate:
 #        SQL: DEBUG
+application:
+  load-test-data: true
+  load-sql-constraints: false
+  load-sql-data: false

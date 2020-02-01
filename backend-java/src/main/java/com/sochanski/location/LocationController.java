@@ -2,6 +2,7 @@ package com.sochanski.location;
 
 import com.sochanski.ApiUtils;
 import com.sochanski.container.Container;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,6 +24,7 @@ public class LocationController {
         return service.getAllLocations();
     }
 
+    @PreAuthorize(value ="hasAuthority('SETTINGS')")
     @PostMapping
     public Location createLocation(@RequestBody @Valid LocationParameters params) {
         return service.createLocation(params);

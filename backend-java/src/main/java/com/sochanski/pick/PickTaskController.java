@@ -2,8 +2,11 @@ package com.sochanski.pick;
 
 
 import com.sochanski.ApiUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+
+@PreAuthorize(value ="hasAuthority('PICKING')")
 @RestController
 @RequestMapping(path = ApiUtils.BASE_API_PATH + "/pick-tasks/{pickTaskId}")
 @CrossOrigin

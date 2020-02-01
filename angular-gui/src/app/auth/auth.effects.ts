@@ -1,8 +1,13 @@
+
+import { createEffect, ofType, OnInitEffects, Actions } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { AuthActions } from './auth.action';
-import { createEffect, Actions, ofType, ROOT_EFFECTS_INIT, OnInitEffects } from '@ngrx/effects';
-import { tap, map } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthEffects implements OnInitEffects {
 
     save$ = createEffect(() =>

@@ -1,0 +1,6 @@
+@mixin table-style {
+  table {
+    width: 100%;
+    overflow: auto;
+  }
+}

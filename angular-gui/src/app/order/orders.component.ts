@@ -1,4 +1,4 @@
-import { ColumnSchema } from './../shared/column-schema.model';
+import { ColumnSchema } from '../shared/table/column-schema.model';
 import { OrdersActions } from './store/orders.actions';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -20,12 +20,12 @@ export class OrderComponent implements OnInit {
   user$: Observable<string> = this.store.select(AuthSelectors.userName);
 
   readonly columnSchema: ColumnSchema<Order>[] = [
-    { name: 'Order Name', param: 'name' },
-    { name: 'Order Status', param: 'status' },
-    { name: 'Last Change By', param: 'lastChangeBy' },
-    { name: 'Last Change Date', param: 'lastChangeDate' },
+    { header: 'Order Name', key: 'name' },
+    { header: 'Order Status', key: 'status' },
+    { header: 'Last Change By', key: 'lastModifiedBy' },
+    { header: 'Last Change Date', key: 'lastModifiedDate' },
   ];
-  readonly displayedColumns = [...this.columnSchema.map(s => s.param), 'bt-actions'];
+  readonly displayedColumns = [...this.columnSchema.map(s => s.key), 'bt-actions'];
 
   constructor(
     private readonly store: Store<{}>,
@@ -33,7 +33,7 @@ export class OrderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.service.loadOrders() 
+    // this.service.loadOrders()
     // .subscribe(orders => this.store.dispatch(OrdersActions.ordersLoaded({ orders })));
     this.store.dispatch(OrdersActions.ordersRequested());
 
@@ -46,7 +46,7 @@ export class OrderComponent implements OnInit {
     );
   }
 
-  
+
   trackById(order?: Order) {
     return order && order.id;
   }

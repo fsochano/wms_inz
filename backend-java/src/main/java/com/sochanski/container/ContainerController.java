@@ -1,6 +1,7 @@
 package com.sochanski.container;
 
 import com.sochanski.ApiUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,6 +23,7 @@ public class ContainerController {
         return service.getAllContainers();
     }
 
+    @PreAuthorize(value ="hasAuthority('SETTINGS')")
     @PostMapping
     public Container createContainer(@RequestBody @Valid ContainerParameters params) {
         return service.createContainer(params);

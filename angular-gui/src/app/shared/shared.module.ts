@@ -1,21 +1,28 @@
-import { AppMaterialModule } from './app-material.module';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LayoutComponent } from './layout/layout.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LayoutModule } from './layout/layout.module';
+import { AppTableModule } from './table/table.module';
+import { AppMaterialModule } from './app-material/app-material.module';
 
 
 @NgModule({
-  declarations: [LayoutComponent],
+  declarations: [],
   exports: [
-    LayoutComponent,
     AppMaterialModule,
     ReactiveFormsModule,
+    LayoutModule,
+    AppTableModule,
+    HttpClientModule,
   ],
   imports: [
     CommonModule,
     AppMaterialModule,
     ReactiveFormsModule,
+    LayoutModule,
+    AppTableModule,
+    HttpClientModule,
   ]
 })
 export class SharedModule { }

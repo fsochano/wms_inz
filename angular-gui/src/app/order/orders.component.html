@@ -1,22 +1,25 @@
-<app-layout>
+<app-with-side-panel-layout>
 
   <h1 header>Orders</h1>
 
-  <mat-accordion sidenav>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>Create order</mat-panel-title>
-      </mat-expansion-panel-header>
-      <app-order-input-data></app-order-input-data>
-    </mat-expansion-panel>
-  </mat-accordion>
+  <div sidenav class="side-nav">
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Create order</mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-order-input-data></app-order-input-data>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
 
-  <table mat-table content [dataSource]="orders$ | async" [trackBy]="trackById">
 
-    <ng-container [matColumnDef]="column.param" *ngFor="let column of columnSchema">
-      <th mat-header-cell *matHeaderCellDef> {{ column.name }} </th>
-      <td mat-cell *matCellDef="let element"> {{ element[column.param] }} </td>
-    </ng-container>
+  <table mat-table content [dataSource]="orders$ | async">
+
+    <app-simple-schema-column
+      *ngFor="let column of columnSchema"
+      [column]="column"
+    ></app-simple-schema-column>
 
     <ng-container matColumnDef="bt-actions">
       <th mat-header-cell *matHeaderCellDef> Actions </th>
@@ -34,4 +37,4 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-</app-layout>
+</app-with-side-panel-layout>

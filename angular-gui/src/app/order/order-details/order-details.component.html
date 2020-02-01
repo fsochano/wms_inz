@@ -1,4 +1,4 @@
-<app-layout>
+<app-with-side-panel-layout>
   <h1 header>Order {{ orderName$ | async }}</h1>
 
 
@@ -16,10 +16,24 @@
     </mat-accordion>
   </div>
 
-  <mat-list content>
-    <mat-list-item *ngFor="let orderLine of orderLines$ | async;">
-      <app-order-line-details [orderLine]="orderLine" (remove)="removeOrderLine($event)"></app-order-line-details>
-    </mat-list-item>
-  </mat-list>
+  <table mat-table content [dataSource]="orderLines$ | async">
 
-</app-layout>
+    <app-simple-schema-column
+      *ngFor="let column of columnSchema"
+      [column]="column"
+    ></app-simple-schema-column>
+
+    <ng-container matColumnDef="bt-actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let orderLine">
+        <button mat-raised-button (click)="removeOrderLine(orderLine)">
+          Remove
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</app-with-side-panel-layout>

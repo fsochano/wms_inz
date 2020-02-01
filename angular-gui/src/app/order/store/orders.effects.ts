@@ -1,11 +1,14 @@
 
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { switchMap, map, withLatestFrom } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { OrdersSelectors } from './orders.selector';
 import { OrdersService } from '../orders.service';
 import { OrdersActions } from './orders.actions';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class OrdersEffects {
   loadOrders$ = createEffect(() =>
     this.actions$.pipe(

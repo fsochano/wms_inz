@@ -1,28 +1,25 @@
-import { AuthEffects } from './auth.effects';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { EffectsModule } from '@ngrx/effects';
 import { RouterModule } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule, MatCardModule, MatButtonModule } from '@angular/material';
 import { authReducer } from './auth.readucer';
-import { HttpClientModule } from '@angular/common/http';
-
-
+import { SharedModule } from './../shared/shared.module';
+import { AuthEffects } from './auth.effects';
+import { LoginGuard } from './login.guard';
 
 @NgModule({
   declarations: [LoginComponent],
   exports: [LoginComponent],
   imports: [
     CommonModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatInputModule,
-    MatButtonModule,
-    RouterModule.forChild([{path: 'login', component: LoginComponent}]),
+    SharedModule,
+    RouterModule.forChild([{
+      path: 'login',
+      component: LoginComponent,
+      canActivate: [LoginGuard],
+    }]),
     StoreModule.forFeature('authFeature', authReducer),
     EffectsModule.forFeature([AuthEffects]),
   ]

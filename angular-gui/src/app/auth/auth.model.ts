@@ -1,6 +1,8 @@
+
+export type Authority = 'ORDERING' | 'PICKING' | 'SHIPPING' | 'SETTINGS';
+
 export interface User {
-    id: number;
-    name: string;
+    username: string;
     token: string;
-    authorities: string[];
+    authorities: Authority[];
 }

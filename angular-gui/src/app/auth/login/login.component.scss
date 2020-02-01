@@ -6,3 +6,10 @@
 .login-form {
   display: flex;  flex-direction: column;
 }
+
+.mat-card-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}

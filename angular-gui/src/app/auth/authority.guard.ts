@@ -3,11 +3,12 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AuthSelectors } from '../auth/auth.selectror';
 import { map } from 'rxjs/operators';
+import { Authority } from './auth.model';
 
 export class AuthorityGuard implements CanActivate {
 
   constructor(
-    private readonly authority: string,
+    private readonly authority: Authority,
     private readonly store: Store<{}>
   ) {
   }

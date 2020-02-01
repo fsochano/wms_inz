@@ -1,3 +1,2 @@
-table{
-    width: 100%;
-}
+@import 'table';
+@include table-style();

@@ -32,6 +32,7 @@ public class Location {
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, updatable = false)
     private LocationType locationType;
 
     @Positive

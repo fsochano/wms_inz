@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShippingComponent } from '../shipping/shipping.component';
 import { AuthGuard } from '../auth/auth.guard';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -10,6 +11,7 @@ import { AuthGuard } from '../auth/auth.guard';
   declarations: [ShippingComponent],
   imports: [
     CommonModule,
+    SharedModule,
     RouterModule.forChild([
       {
         path: 'shipping',

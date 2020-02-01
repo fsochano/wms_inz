@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LayoutComponent } from './layout.component';
+import { SimpleSchemaColumnComponent } from './simple-schema-column.component';
 
-describe('LayoutComponent', () => {
-  let component: LayoutComponent;
-  let fixture: ComponentFixture<LayoutComponent>;
+describe('SimpleSchemaColumnComponent', () => {
+  let component: SimpleSchemaColumnComponent;
+  let fixture: ComponentFixture<SimpleSchemaColumnComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LayoutComponent ]
+      declarations: [ SimpleSchemaColumnComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LayoutComponent);
+    fixture = TestBed.createComponent(SimpleSchemaColumnComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

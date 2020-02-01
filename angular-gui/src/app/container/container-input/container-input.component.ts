@@ -1,3 +1,4 @@
+import { ContainerType } from './../store/containers.model';
 import { Sku } from './../../sku/store/sku.model';
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -20,6 +21,7 @@ export class ContainerInputComponent implements OnInit {
 
   error?: string;
   sku$: Observable<Sku[]>;
+  containerTypes: ContainerType[] = ['STORAGE', 'SHIPPING'];
 
 
   constructor(
@@ -29,10 +31,11 @@ export class ContainerInputComponent implements OnInit {
     private store: Store<{}>
     ) {
     this.form = fb.group({
-      containerSize: [null, [Validators.required, Validators.min(1)]],
-      skuId: [null, [Validators.required]],
-      skuQty: [null, [Validators.required, Validators.min(0)]],
-      skuCapacity: [null, [Validators.required, Validators.min(1)]]
+      type: fb.control(null, [Validators.required]),
+      containerSize: fb.control(null, [Validators.required, Validators.min(1)]),
+      skuId: fb.control(null, [Validators.required]),
+      skuQty: fb.control(null, [Validators.required, Validators.min(0)]),
+      skuCapacity: fb.control(null, [Validators.required, Validators.min(1)]),
     });
     this.sku$ = skuService.loadSkus();
   }
@@ -42,8 +45,8 @@ export class ContainerInputComponent implements OnInit {
 
   createContainer() {
     this.error = undefined;
-    const { containerSize, skuId, skuQty, skuCapacity } = this.form.value;
-    this.containerService.createContainer({ locationId: this.locationId, containerSize, skuId, skuQty, skuCapacity })
+    const { type, containerSize, skuId, skuQty, skuCapacity } = this.form.value;
+    this.containerService.createContainer({ type, locationId: this.locationId, containerSize, skuId, skuQty, skuCapacity })
     .subscribe(
       container => this.store.dispatch(ContainersActions.containerCreated({ container })),
       error => this.error = error.error.message

@@ -1,15 +1,14 @@
-table {
-    width: 100%;
-}
+@import 'table';
+@include table-style();
 
 .header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
 
-    button {
-        height: 3rem;
-    }
+  button {
+    height: 3rem;
+  }
 }

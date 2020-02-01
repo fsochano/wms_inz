@@ -2,7 +2,11 @@ import { createEffect, ofType, Actions } from '@ngrx/effects';
 import { switchMap, map } from 'rxjs/operators';
 import { OrderLinesActions } from './order-lines.actions';
 import { OrderLinesService } from '../order-lines.service';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class OrderLinesEffects {
     loadOrderLines$ = createEffect(() =>
         this.actions$.pipe(

@@ -1,3 +1,4 @@
+import { ColumnSchema } from '../../shared/table/column-schema.model';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -18,14 +19,24 @@ import { OrdersSelectors } from '../store/orders.selector';
 })
 export class OrderDetailsComponent implements OnInit {
 
-  order$: Observable<Order> = this.store.select(OrdersSelectors.selectOrder(this.route.snapshot.params.orderId)).pipe(
+  readonly columnSchema: ColumnSchema<OrderLine>[] = [
+    { header: 'Id', key: 'id' },
+    { header: 'Quantity', key: 'qty' },
+    { header: 'Allocated', key: 'allocated' },
+    { header: 'Sku name', key: 'sku', param: v => v.sku.name },
+    { header: 'Last Change By', key: 'lastModifiedBy' },
+    { header: 'Last Change Date', key: 'lastModifiedDate' },
+  ];
+  readonly displayedColumns = [...this.columnSchema.map(s => s.key), 'bt-actions'];
+
+
+  order$: Observable<Order> = this.store.select(OrdersSelectors.selectOrder(this.orderId)).pipe(
     filter(o => o !== undefined),
   );
   orderName$: Observable<string> = this.order$.pipe(
     map(order => order.name),
   );
   orderLines$: Observable<OrderLine[]> = this.store.select(OrderLinesSelectors.selectAllOrderLines);
-
 
   constructor(
     private route: ActivatedRoute,

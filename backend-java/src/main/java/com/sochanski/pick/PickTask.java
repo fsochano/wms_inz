@@ -3,18 +3,19 @@ package com.sochanski.pick;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sochanski.container.Container;
+import com.sochanski.db.Auditable;
 import com.sochanski.order.data.OrderLine;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.Positive;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "pick_task")
-public class PickTask {
+public class PickTask extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pick_task_id_gen")
@@ -26,6 +27,7 @@ public class PickTask {
     @JoinColumn(name = "pick_list_id", nullable = false)
     private PickList pickList;
 
+    @Positive
     private long qty;
 
     @Enumerated(EnumType.STRING)
@@ -42,25 +44,25 @@ public class PickTask {
     private Container toContainer;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_line_id", nullable = false)
-    private List<OrderLine> orderLine;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH, optional = false)
+    @JoinColumn(name = "order_line_id", nullable = false, updatable = false)
+    private OrderLine orderLine;
 
     public PickTask(PickList pickList,
-                    List<OrderLine> orderLine,
+                    OrderLine orderLine,
                     PickTaskStatus status,
                     long qty) {
         this(pickList, orderLine, status, qty, null, null);
     }
 
     public PickTask(PickList pickList,
-                    List<OrderLine> orderLine,
+                    OrderLine orderLine,
                     PickTaskStatus status,
                     long qty,
                     Container fromContainer,
                     Container toContainer) {
         this.pickList = pickList;
-        this.orderLine = List.copyOf(orderLine);
+        this.orderLine = orderLine;
         this.status = status;
         this.qty = qty;
         this.fromContainer = fromContainer;
@@ -91,4 +93,9 @@ public class PickTask {
         return toContainer != null ? toContainer.getLocation().getName() : null;
     }
 
+    @JsonProperty
+    @Transient
+    public String getSkuName() {
+        return orderLine != null ? orderLine.getSku().getName() : null;
+    }
 }

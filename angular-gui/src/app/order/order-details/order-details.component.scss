@@ -1,10 +1,6 @@
-.side-nav {
-  display: flex;
-  flex-direction: column;
-  align-content: space-between;
-  margin: 4px;
+@import 'side-nav';
+@include side-nav-style();
 
-  * {
-    margin: 4px 0;
-  }
-}
+@import 'table';
+@include table-style();
+

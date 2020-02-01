@@ -9,6 +9,9 @@ import javax.validation.constraints.PositiveOrZero;
 @Validated
 public class ContainerParameters {
     @NotNull
+    public ContainerType type;
+
+    @NotNull
     public long locationId;
 
     @PositiveOrZero

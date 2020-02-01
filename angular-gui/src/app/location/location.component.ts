@@ -1,4 +1,4 @@
-import { ColumnSchema } from './../shared/column-schema.model';
+import { ColumnSchema } from '../shared/table/column-schema.model';
 import { WarehouseLocation } from './store/location.model';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -16,14 +16,14 @@ export class LocationComponent implements OnInit {
   locations$: Observable<WarehouseLocation[]> = this.store.select(LocationsSelectors.selectAllLocations);
 
   columnSchema: ColumnSchema<WarehouseLocation>[] = [
-    { name: 'Location Name', param: 'name' },
-    { name: 'Location type', param: 'locationType' },
-    { name: 'Location capacity', param: 'capacity' },
-    { name: 'Location used capacity', param: 'usedCapacity' },
-    { name: 'Location free capacity', param: 'freeCapacity' },
+    { header: 'Location Name', key: 'name' },
+    { header: 'Location type', key: 'locationType' },
+    { header: 'Location capacity', key: 'capacity' },
+    { header: 'Location used capacity', key: 'usedCapacity' },
+    { header: 'Location free capacity', key: 'freeCapacity' },
   ];
-  
-  displayedColumns: string[] = [...this.columnSchema.map(c => c.param), 'bt-details'];
+
+  displayedColumns: string[] = [...this.columnSchema.map(c => c.key), 'bt-details'];
 
   constructor(
     private store: Store<{}>,

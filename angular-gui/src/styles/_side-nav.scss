@@ -1,0 +1,12 @@
+@mixin side-nav-style {
+  .side-nav {
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    margin: 4px;
+
+    * {
+      margin: 4px 0;
+    }
+  }
+}

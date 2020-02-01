@@ -1,6 +1,7 @@
 package com.sochanski.container;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sochanski.db.Auditable;
 import com.sochanski.location.Location;
 import com.sochanski.sku.Sku;
 import lombok.Data;
@@ -14,12 +15,16 @@ import javax.validation.constraints.PositiveOrZero;
 @NoArgsConstructor
 @Entity
 @Table(name = "container")
-public class Container {
+public class Container extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "container_id_gen")
     @SequenceGenerator(name = "container_id_gen", sequenceName = "container_id_gen", allocationSize = 1)
     private long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, updatable = false)
+    private ContainerType type;
 
     @JsonIgnore
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -32,17 +37,23 @@ public class Container {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "sku_id", nullable = false)
     private Sku sku;
-
-    @PositiveOrZero
-    private long skuQty;
     @Positive
     private long skuCapacity;
 
-    public Container(Location location, int containerSize, Sku sku, int skuQty, int skuCapacity){
+    @PositiveOrZero
+    private long skuQty;
+    @PositiveOrZero
+    private long allocatedQty;
+    @PositiveOrZero
+    private long freeQty;
+
+    public Container(ContainerType type, Location location, int containerSize, Sku sku, int skuQty, int skuCapacity){
+        this.type = type;
         this.location = location;
         this.containerSize = containerSize;
         this.sku = sku;
         this.skuQty = skuQty;
+        this.freeQty = skuQty;
         this.skuCapacity = skuCapacity;
     }
 

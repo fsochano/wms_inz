@@ -1,13 +1,13 @@
 package com.sochanski.order.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sochanski.db.Auditable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +17,7 @@ import static java.util.Collections.emptyList;
 @NoArgsConstructor
 @Entity
 @Table(name = "order_header")
-public class OrderHeader {
+public class OrderHeader extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_header_id_gen")
@@ -31,10 +31,6 @@ public class OrderHeader {
     @NotNull
     @Enumerated(EnumType.STRING)
     private OrderHeaderStatus status;
-
-    private String lastChangeBy;
-
-    private LocalDateTime lastChangeDate;
 
     @JsonIgnore
     @OneToMany(mappedBy = "orderHeader", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

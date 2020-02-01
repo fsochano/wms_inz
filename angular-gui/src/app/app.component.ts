@@ -14,6 +14,11 @@ export class AppComponent implements OnInit {
   userName$: Observable<string> = this.store.select(AuthSelectors.userName);
   isUserLogged$: Observable<boolean> = this.store.select(AuthSelectors.isLoggedIn);
 
+  showOrdering = this.store.select(AuthSelectors.hasAuthority, 'ORDERING');
+  showPicking = this.store.select(AuthSelectors.hasAuthority, 'PICKING');
+  showShipping = this.store.select(AuthSelectors.hasAuthority, 'SHIPPING');
+  showSettings = this.store.select(AuthSelectors.hasAuthority, 'SETTINGS');
+
   constructor(
     private store: Store<{}>
   ) {

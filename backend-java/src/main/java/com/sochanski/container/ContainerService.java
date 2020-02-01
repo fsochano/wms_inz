@@ -42,7 +42,7 @@ public class ContainerService {
         Sku sku = skuRepository.findById(params.skuId)
                 .orElseThrow(SkuNotFoundException::new);
 
-        Container container = new Container(location, params.containerSize, sku, params.skuQty, params.skuCapacity);
+        Container container = new Container(params.type, location, params.containerSize, sku, params.skuQty, params.skuCapacity);
         return containerRepository.save(container);
     }
 

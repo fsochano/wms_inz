@@ -1,4 +1,4 @@
-import { ColumnSchema } from './../shared/column-schema.model';
+import { ColumnSchema } from '../shared/table/column-schema.model';
 import { PickListsSelectors } from './store/pick-lists.selector';
 import { PickListsActions } from './store/pick-lists.actions';
 import { Component, OnInit } from '@angular/core';
@@ -13,10 +13,12 @@ import { PickList } from './pick-lists.model';
 export class PickingComponent implements OnInit {
 
   columnSchema: ColumnSchema<PickList>[] = [
-    { name: 'Id', param: 'id' },
-    { name: 'Status', param: 'status' },
+    { header: 'Id', key: 'id' },
+    { header: 'Status', key: 'status' },
+    { header: 'Last Change By', key: 'lastModifiedBy' },
+    { header: 'Last Change Date', key: 'lastModifiedDate' },
   ];
-  displayedColumns = [...this.columnSchema.map(s => s.param), 'bt-details'];
+  displayedColumns = [...this.columnSchema.map(s => s.key), 'bt-details'];
 
   pickTasks$ = this.store.select(PickListsSelectors.selectAllPickLists);
 

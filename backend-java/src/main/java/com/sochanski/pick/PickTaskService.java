@@ -29,6 +29,7 @@ public class PickTaskService {
             throw new InsufficientQuantityException();
         }
         fromContainer.setSkuQty(fromContainer.getSkuQty() - pickTask.getQty());
+        fromContainer.setAllocatedQty(fromContainer.getAllocatedQty() - pickTask.getQty());
         containerRepository.save(fromContainer);
         return pickTask;
     }
@@ -42,6 +43,8 @@ public class PickTaskService {
             throw new NotEnoughSpaceInContainerException();
         }
         toContainer.setSkuQty(newSkuQuantity);
+        toContainer.setFreeQty(0);
+        toContainer.setAllocatedQty(toContainer.getSkuQty());
         containerRepository.save(toContainer);
         return pickTask;
     }

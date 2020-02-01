@@ -1,6 +1,7 @@
 package com.sochanski.sku;
 
 import com.sochanski.ApiUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,11 +23,13 @@ public class SkuController {
         return service.getAllSku();
     }
 
+    @PreAuthorize(value ="hasAuthority('SETTINGS')")
     @PostMapping
     public Sku createSku(@RequestBody @Valid SkuParameters params) {
         return service.createSku(params);
     }
 
+    @PreAuthorize(value ="hasAuthority('SETTINGS')")
     @DeleteMapping(path = "/{skuId}")
     public void deleteSku(@PathVariable long skuId) {
         service.deleteSku(skuId);

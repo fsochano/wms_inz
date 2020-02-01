@@ -1,20 +1,56 @@
 <div class="main">
-
   <div class="header">
     <mat-toolbar color="primary" *ngIf="isUserLogged$ | async">
       <mat-toolbar-row class="app-header">
         <span class="header-message">Welcome {{ userName$ | async }}!</span>
         <nav mat-tab-nav-bar backgroundColor="primary">
-          <a mat-tab-link routerLink="/order" routerLinkActive="active" #orders="routerLinkActive"
-            [active]="orders.isActive">Ordering</a>
-          <a mat-tab-link routerLink="/picking" routerLinkActive="active" #picking="routerLinkActive"
-            [active]="picking.isActive">Picking</a>
-          <a mat-tab-link routerLink="/shipping" routerLinkActive="active" #shipping="routerLinkActive"
-            [active]="shipping.isActive">Shipping</a>
-          <a mat-tab-link routerLink="/settings" routerLinkActive="active" #settings="routerLinkActive"
-            [active]="settings.isActive">Settings</a>
+          <a
+            *ngIf="showOrdering | async"
+            mat-tab-link
+            routerLink="/order"
+            routerLinkActive="active"
+            #orders="routerLinkActive"
+            [active]="orders.isActive"
+          >
+            Ordering
+          </a>
+          <a
+            *ngIf="showPicking | async"
+            mat-tab-link
+            routerLink="/picking"
+            routerLinkActive="active"
+            #picking="routerLinkActive"
+            [active]="picking.isActive"
+          >
+            Picking
+          </a>
+          <a
+            *ngIf="showShipping | async"
+            mat-tab-link
+            routerLink="/shipping"
+            routerLinkActive="active"
+            #shipping="routerLinkActive"
+            [active]="shipping.isActive"
+          >
+            Shipping
+          </a>
+          <a
+            *ngIf="showSettings | async"
+            mat-tab-link
+            routerLink="/settings"
+            routerLinkActive="active"
+            #settings="routerLinkActive"
+            [active]="settings.isActive"
+          >
+            Settings
+          </a>
         </nav>
-        <button mat-raised-button routerLink="/login" routerLinkActive="active" (click)="logout()">
+        <button
+          mat-raised-button
+          routerLink="/login"
+          routerLinkActive="active"
+          (click)="logout()"
+        >
           Logout
         </button>
       </mat-toolbar-row>
@@ -24,5 +60,4 @@
   <div class="content">
     <router-outlet></router-outlet>
   </div>
-
 </div>

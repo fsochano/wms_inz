@@ -2,10 +2,12 @@ package com.sochanski.pick;
 
 
 import com.sochanski.ApiUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@PreAuthorize(value ="hasAuthority('PICKING')")
 @RestController
 @RequestMapping(path = ApiUtils.BASE_API_PATH + "/pick-lists")
 @CrossOrigin

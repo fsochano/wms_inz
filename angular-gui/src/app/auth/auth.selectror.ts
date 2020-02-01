@@ -1,3 +1,4 @@
+import { Authority } from './auth.model';
 import { AuthState } from './auth.readucer';
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 
@@ -14,7 +15,7 @@ class Selectors {
     );
     userName = createSelector(
         this.user,
-        user => user ? user.name : '',
+        user => user ? user.username : '',
     );
 
     token = createSelector(
@@ -25,6 +26,16 @@ class Selectors {
     authorities = createSelector(
         this.user,
         user => user && user.authorities,
+    );
+
+    authoritiesSet = createSelector(
+      this.authorities,
+      authorities => new Set(authorities),
+  );
+
+    hasAuthority = createSelector(
+      this.authoritiesSet,
+      (authorities: Set<Authority>, authority: Authority) => authorities.has(authority),
     );
 }
 

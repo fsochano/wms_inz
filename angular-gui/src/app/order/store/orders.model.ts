@@ -1,4 +1,5 @@
 import { Sku } from '../../sku/store/sku.model';
+import { Auditable } from '../../shared/entity.model';
 
 export enum OrderStatus {
     HOLD = 'HOLD',
@@ -7,16 +8,15 @@ export enum OrderStatus {
     SHIPPED = 'SHIPPED',
 }
 
-export interface Order {
+export interface Order extends Auditable {
     id: number;
     name: string;
     status: OrderStatus;
-    lastChangeBy: string;
-    lastChangeDate: string;
 }
 
-export interface OrderLine {
+export interface OrderLine extends Auditable {
     id: number;
     qty: number;
+    allocated: number;
     sku: Sku;
 }

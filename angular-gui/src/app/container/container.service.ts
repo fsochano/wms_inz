@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Container } from './store/containers.model';
+import { Container, ContainerType } from './store/containers.model';
+
 
 interface ContainerParams {
+  type: ContainerType;
   locationId: number;
   containerSize: number;
   skuId: number;

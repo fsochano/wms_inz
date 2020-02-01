@@ -1,4 +1,5 @@
-<div class="header">
+<app-with-header-layout>
+  <div header class="header">
     <mat-toolbar color="secondary">
         <mat-toolbar-row class="navigation">
             <nav mat-tab-nav-bar backgroundColor="secondary">
@@ -9,8 +10,9 @@
             </nav>
         </mat-toolbar-row>
     </mat-toolbar>
-</div>
+  </div>
 
-<div class="content">
-    <router-outlet></router-outlet>
-</div>
+  <router-outlet content></router-outlet>
+
+</app-with-header-layout>
+
