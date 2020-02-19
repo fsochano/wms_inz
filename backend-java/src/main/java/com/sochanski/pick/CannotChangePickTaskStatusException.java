@@ -1,5 +1,6 @@
 package com.sochanski.pick;
 
+import com.sochanski.pick.data.PickTaskStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 

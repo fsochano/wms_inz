@@ -4,21 +4,18 @@ import { OrdersActions } from './orders.actions';
 import { Order, OrderStatus } from './orders.model';
 
 export interface OrdersState extends EntityState<Order> {
-    isLoading: boolean;
  }
 
 export const OrdersAdapter: EntityAdapter<Order> = createEntityAdapter<Order>();
 
-const initialState: OrdersState = OrdersAdapter.getInitialState({
-    isLoading: true,
-});
+const initialState: OrdersState = OrdersAdapter.getInitialState();
 
 export const OrdersReducers = createReducer(
     initialState,
-    on(OrdersActions.orderRequested,
-        (state) => OrdersAdapter.removeAll({...state, isLoading: false })),
+    on(OrdersActions.ordersRequested,
+        (state) => OrdersAdapter.removeAll(state)),
     on(OrdersActions.ordersLoaded,
-        (state, { orders }) => OrdersAdapter.addAll(orders, {...state, isLoading: true })),
+        (state, { orders }) => OrdersAdapter.addAll(orders, state)),
     on(OrdersActions.orderLoaded,
         (state, { order }) => OrdersAdapter.addOne(order, state)),
     on(OrdersActions.orderCreated,

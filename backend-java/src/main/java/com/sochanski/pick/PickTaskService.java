@@ -2,6 +2,8 @@ package com.sochanski.pick;
 
 import com.sochanski.container.Container;
 import com.sochanski.container.ContainerRepository;
+import com.sochanski.pick.data.PickTask;
+import com.sochanski.pick.data.PickTaskStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

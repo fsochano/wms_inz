@@ -12,6 +12,11 @@ import com.sochanski.order.data.OrderHeader;
 import com.sochanski.order.data.OrderHeaderStatus;
 import com.sochanski.order.data.OrderLine;
 import com.sochanski.pick.*;
+import com.sochanski.pick.data.PickList;
+import com.sochanski.pick.data.PickListStatus;
+import com.sochanski.pick.data.PickTask;
+import com.sochanski.pick.data.PickTaskStatus;
+import com.sochanski.security.SecurityUtils;
 import com.sochanski.sku.Sku;
 import com.sochanski.sku.SkuRepository;
 import org.slf4j.Logger;
@@ -65,6 +70,8 @@ public class TestDataLoader implements CommandLineRunner {
             return;
         }
         log.info("Test data loading started");
+        SecurityUtils.setSystemUser();
+        
         Location reg1241 = createLocation("REG1241", LocationType.STORAGE, 15);
         Location reg1242 = createLocation("REG1242", LocationType.STORAGE, 5);
         Location reg1244 = createLocation("REG1244", LocationType.STORAGE, 15);
@@ -123,7 +130,7 @@ public class TestDataLoader implements CommandLineRunner {
         OrderLine ponczochyOL = createOrderLine(ponczochySku, orderHeader, 50L);
 
         pickList = pickListRepository.save(new PickList(orderHeader, PickListStatus.SHIPPED));
-        pickTaskRepository.save(new PickTask(pickList, ponczochyOL, PickTaskStatus.SHIPPED, ponczochyOL.getQty()));
+        pickTaskRepository.save(new PickTask(pickList, ponczochyOL, ponczochyOL.getQty(), PickTaskStatus.SHIPPED));
 
         log.info("Test data loading ended");
         printLocationCapacity(reg1241);

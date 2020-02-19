@@ -19,11 +19,6 @@ class Selectors {
         selectEntities
     );
 
-    isLoading = createSelector(
-        this.feature,
-        state => state.isLoading,
-    );
-
     selectOrder(id: string) {
         return createSelector(
             this.selectOrdersMap,

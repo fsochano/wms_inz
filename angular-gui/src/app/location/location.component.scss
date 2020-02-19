@@ -1,2 +1,5 @@
+@import 'side-nav';
+@include side-nav-style();
+
 @import 'table';
 @include table-style();

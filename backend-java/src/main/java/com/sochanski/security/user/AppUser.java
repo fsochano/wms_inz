@@ -1,13 +1,17 @@
 package com.sochanski.security.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sochanski.security.CreateUserParams;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.emptySet;
 
 @Data
 @AllArgsConstructor
@@ -20,16 +24,17 @@ public class AppUser implements UserDetails {
     @Column(length = 50, unique = true, updatable = false, nullable = false)
     private String username;
 
-    @Column(length = 100, nullable = false)
+    @JsonIgnore
+    @Column(length = 100)
     private String password;
 
-    private boolean isAccountNonExpired;
-    private boolean isAccountNonLocked;
-    private boolean isCredentialsNonExpired;
-    private boolean isEnabled;
+    private boolean isAccountNonExpired = true;
+    private boolean isAccountNonLocked = true;
+    private boolean isCredentialsNonExpired = true;
+    private boolean isEnabled = true;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    private List<AppAuthority> authorities;
+    private Set<AppAuthority> authorities = emptySet();
 
     public AppUser(UserDetails user) {
         username = user.getUsername();
@@ -40,6 +45,12 @@ public class AppUser implements UserDetails {
         isEnabled = user.isEnabled();
         authorities = user.getAuthorities().stream()
                 .map(a -> new AppAuthority(a.getAuthority(), this))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
+
+    public AppUser(CreateUserParams params) {
+        username = params.getUsername();
+        password = params.getPassword();
+    }
+
 }

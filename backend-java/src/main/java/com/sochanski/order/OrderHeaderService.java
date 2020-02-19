@@ -1,9 +1,11 @@
 package com.sochanski.order;
 
+import com.sochanski.ApplicationProperties;
 import com.sochanski.order.data.OrderHeader;
 import com.sochanski.order.data.OrderHeaderCreateParams;
 import com.sochanski.order.data.OrderHeaderStatus;
 import com.sochanski.order.data.OrderHeaderUpdateParams;
+import com.sochanski.processing.picks.PicksGenerationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +15,14 @@ import java.util.List;
 public class OrderHeaderService {
 
     private final OrderHeaderRepository orderHeaderRepository;
+    private final ApplicationProperties applicationProperties;
+    private final PicksGenerationService picksGenerationService;
 
     @Autowired
-    public OrderHeaderService(OrderHeaderRepository orderHeaderRepository) {
+    public OrderHeaderService(OrderHeaderRepository orderHeaderRepository, ApplicationProperties applicationProperties, PicksGenerationService picksGenerationService) {
+        this.applicationProperties = applicationProperties;
         this.orderHeaderRepository = orderHeaderRepository;
+        this.picksGenerationService = picksGenerationService;
     }
 
     public List<OrderHeader> getAllOrders() {
@@ -35,13 +41,17 @@ public class OrderHeaderService {
     }
 
     public OrderHeader releaseOrder(long id) {
-        return orderHeaderRepository.findById(id)
+        var header =  orderHeaderRepository.findById(id)
                 .map(order -> {
                     checkOrderStatusHold(order);
                     order.setStatus(OrderHeaderStatus.RELEASED);
                     return order;
                 }).map(orderHeaderRepository::save)
                 .orElseThrow(OrderHeaderNotFoundException::new);
+        if(applicationProperties.isJavaProcessing()) {
+            picksGenerationService.schedulePicksGeneration(header.getId());
+        }
+        return header;
     }
 
     public OrderHeader updateOrder(long id, OrderHeaderUpdateParams params) {

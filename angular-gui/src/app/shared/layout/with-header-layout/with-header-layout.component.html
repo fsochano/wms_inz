@@ -1,8 +1,12 @@
 <div class="main">
-    <div class="header">
+  <div class="header">
+    <mat-toolbar header color="secondary">
+      <mat-toolbar-row>
         <ng-content select="[header]"></ng-content>
-    </div>
-    <div class="content">
-      <ng-content select="[content]"></ng-content>
-    </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </div>
+  <div class="content">
+    <ng-content select="[content]"></ng-content>
+  </div>
 </div>

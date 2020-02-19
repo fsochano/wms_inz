@@ -1,4 +1,4 @@
-package com.sochanski.pick;
+package com.sochanski.pick.data;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

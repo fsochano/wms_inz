@@ -1,6 +1,10 @@
 <div class="main">
   <div class="header">
-      <ng-content select="[header]"></ng-content>
+    <mat-toolbar header color="secondary">
+      <mat-toolbar-row>
+        <ng-content select="[header]"></ng-content>
+      </mat-toolbar-row>
+    </mat-toolbar>
   </div>
   <div class="content">
     <mat-sidenav-container content>

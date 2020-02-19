@@ -7,6 +7,7 @@ import { LocationModule } from '../location/location.module';
 import { ContainerModule } from '../container/container.module';
 import { SharedModule } from '../shared/shared.module';
 import { SettingsRoutingModule } from './settings-routing.module';
+import { UsersModule } from '../users/users.module';
 
 
 
@@ -18,6 +19,7 @@ import { SettingsRoutingModule } from './settings-routing.module';
     SkuModule,
     LocationModule,
     ContainerModule,
+    UsersModule,
     RouterModule,
     SettingsRoutingModule,
   ]

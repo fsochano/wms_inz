@@ -1,0 +1,14 @@
+@import 'side-nav';
+@include side-nav-style();
+
+@import 'table';
+@include table-style();
+
+.actions-cell {
+  width: 400px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-around;
+}

@@ -2,6 +2,7 @@ package com.sochanski.pick;
 
 
 import com.sochanski.ApiUtils;
+import com.sochanski.pick.data.PickTask;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 

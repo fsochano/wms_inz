@@ -35,3 +35,4 @@ application:
   load-test-data: true
   load-sql-constraints: true
   load-sql-data: false
+  java-processing: false

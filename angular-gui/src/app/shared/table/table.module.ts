@@ -2,7 +2,7 @@ import { ParamExtractorPipe } from './param-extractor.pipe';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SimpleSchemaColumnComponent } from './simple-schema-column/simple-schema-column.component';
-import { MatTableModule } from '@angular/material';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [

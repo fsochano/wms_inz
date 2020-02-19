@@ -1,5 +1,5 @@
 import { Component, OnInit, Optional, OnDestroy, Input, ViewChild } from '@angular/core';
-import { MatTable, MatColumnDef, MatHeaderCellDef, MatCellDef } from '@angular/material';
+import { MatTable, MatColumnDef, MatHeaderCellDef, MatCellDef } from '@angular/material/table';
 import { ColumnSchema } from '../column-schema.model';
 
 @Component({

@@ -1,11 +1,10 @@
 <app-with-side-panel-layout>
-  <h1 header>Order {{ orderName$ | async }}</h1>
-
+  <h2 header class="mat-h2">Order {{ orderName$ | async }}</h2>
 
   <div sidenav class="side-nav">
-    <button mat-raised-button routerLink="../" routerLinkActive="active">Back</button>
+    <button mat-raised-button color="primary" routerLink="../" routerLinkActive="active">Back</button>
     <app-order-properties [order]="order$ | async"></app-order-properties>
-    <button mat-raised-button [disabled]="isDisabled$ | async" (click)="releaseOrder()">Release</button>
+    <button mat-raised-button color="warn" [disabled]="isDisabled$ | async" (click)="releaseOrder()">Release</button>
     <mat-accordion>
       <mat-expansion-panel>
         <mat-expansion-panel-header>
@@ -24,7 +23,7 @@
     <ng-container matColumnDef="bt-actions">
       <th mat-header-cell *matHeaderCellDef> Actions </th>
       <td mat-cell *matCellDef="let orderLine">
-        <button mat-raised-button [disabled]="isDisabled$ | async" (click)="removeOrderLine(orderLine)">
+        <button mat-raised-button color="warn" [disabled]="isDisabled$ | async" (click)="removeOrderLine(orderLine)">
           Remove
         </button>
       </td>

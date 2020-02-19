@@ -7,6 +7,7 @@ import { OrderLinesActions } from '../../store/order-lines.actions';
 import { OrderLinesService } from '../../order-lines.service';
 import { Order } from '../../store/orders.model';
 import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class OrderInputDetailsComponent implements OnInit {
     private orderLinesService: OrderLinesService,
     skuService: SkuService,
     private store: Store<{}>
-    ) {
+  ) {
     this.form = fb.group({
       qty: [null, [Validators.required, Validators.min(1)]],
       skuId: [null, [Validators.required]],
@@ -41,14 +42,18 @@ export class OrderInputDetailsComponent implements OnInit {
   }
 
   createOrderLine() {
+    this.form.disable();
     this.error = undefined;
     const val = this.form.value;
     this.orderLinesService.createOrderLine(this.order.id,
-      { qty:  val.qty, skuId: val.skuId })
-    .subscribe(
-      line => this.store.dispatch(OrderLinesActions.orderLineCreated({ line })),
-      error => this.error = error.error.message
-    );
+      { qty: val.qty, skuId: val.skuId })
+      .pipe(
+        finalize(() => this.form.enable()),
+      )
+      .subscribe(
+        line => this.store.dispatch(OrderLinesActions.orderLineCreated({ line })),
+        error => this.error = 'Error: ' + error.error.message,
+      );
   }
 
 }

@@ -1,12 +1,9 @@
 package com.sochanski.security;
 
 import com.sochanski.ApiUtils;
-import com.sochanski.security.user.AppAuthority;
 import com.sochanski.security.user.AppUser;
 import com.sochanski.security.user.AppUserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +14,7 @@ import static java.util.stream.Collectors.toList;
 
 @PreAuthorize(value = "hasAuthority('SETTINGS')")
 @RestController
-@RequestMapping(path = ApiUtils.BASE_API_PATH+"/users")
+@RequestMapping(path = ApiUtils.BASE_API_PATH + "/users")
 @CrossOrigin
 public class UserController {
 
@@ -41,21 +38,37 @@ public class UserController {
 
     @PostMapping
     public UserDTO createUser(@RequestBody @Valid CreateUserParams params) {
-        userDetailsManager.createUser(
-                User.withUsername(params.getUsername())
-                .password(passwordEncoder.encode(params.getPassword()))
-                .build());
-        UserDetails userDetails = userDetailsManager.loadUserByUsername(params.getUsername());
+        params.setPassword(passwordEncoder.encode(params.getPassword()));
+        userDetailsManager.createUser(new AppUser(params));
+        var userDetails = userDetailsManager.loadUserByUsername(params.getUsername());
         return new UserDTO(userDetails);
     }
 
-    @PostMapping(path= "/{username}/authorities")
-    public UserDTO addAuthority(@PathVariable String username, @RequestBody String authority) {
-        AppUser userDetails = userDetailsManager.loadUserByUsername(username);
-        List<AppAuthority> authorities = userDetails.getAuthorities();
-        authorities.add(new AppAuthority(authority, userDetails));
-        userDetailsManager.updateUser(userDetails);
+    @DeleteMapping(path = "/{username}")
+    public void removeUser(@PathVariable String username) {
+        var userDetails = userDetailsManager.loadUserByUsername(username);
+        userDetailsManager.deleteUser(userDetails.getUsername());
+    }
+
+    @PostMapping(path = "/{username}/password")
+    public UserDTO changePassword(@PathVariable String username, @RequestBody String password) {
+        var userDetails = userDetailsManager.loadUserByUsername(username);
+        userDetailsManager.updatePassword(userDetails, password);
         return new UserDTO(userDetails);
+    }
+
+    @PostMapping(path = "/{username}/authorities/{authority}")
+    public UserDTO addAuthority(@PathVariable String username, @PathVariable String authority) {
+        var userDetails = userDetailsManager.loadUserByUsername(username);
+        var user = userDetailsManager.addAuthority(userDetails, authority);
+        return new UserDTO(user);
+    }
+
+    @DeleteMapping(path = "/{username}/authorities/{authority}")
+    public UserDTO removeAuthority(@PathVariable String username, @PathVariable String authority) {
+        var userDetails = userDetailsManager.loadUserByUsername(username);
+        var user = userDetailsManager.removeAuthority(userDetails, authority);
+        return new UserDTO(user);
     }
 
 }

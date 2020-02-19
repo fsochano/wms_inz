@@ -11,4 +11,5 @@ public class ApplicationProperties {
     private boolean loadTestData;
     private boolean loadSqlConstraints;
     private boolean loadSqlData;
+    private boolean javaProcessing;
 }

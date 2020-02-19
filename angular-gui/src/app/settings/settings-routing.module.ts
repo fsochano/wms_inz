@@ -7,6 +7,7 @@ import { SkuDetailsComponent } from '../sku/sku-details/sku-details.component';
 import { LocationComponent } from '../location/location.component';
 import { LocationDetailsComponent } from '../location/location-details/location-details.component';
 import { SettingsGuard } from './settings.guard';
+import { UsersComponent } from '../users/users.component';
 
 @NgModule({
     imports: [
@@ -18,7 +19,7 @@ import { SettingsGuard } from './settings.guard';
                 children: [
                     {
                         path: '',
-                        redirectTo: 'sku',
+                        redirectTo: 'location',
                         pathMatch: 'full',
                     },
                     {
@@ -39,6 +40,11 @@ import { SettingsGuard } from './settings.guard';
                     {
                         path: 'location/:locationId',
                         component: LocationDetailsComponent,
+                        canActivate: [AuthGuard],
+                    },
+                    {
+                        path: 'user',
+                        component: UsersComponent,
                         canActivate: [AuthGuard],
                     },
                 ]

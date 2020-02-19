@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { OrdersService } from '../orders.service';
 import { OrdersActions } from '../store/orders.actions';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-input-data',
@@ -12,6 +13,7 @@ import { OrdersActions } from '../store/orders.actions';
 export class OrderInputDataComponent implements OnInit {
 
   form: FormGroup;
+  error?: string;
 
   constructor(
     fb: FormBuilder,
@@ -26,11 +28,15 @@ export class OrderInputDataComponent implements OnInit {
   }
 
   createOrder() {
-    const val = this.form.value;
-    this.ordersService.createOrder(val.name)
+    this.form.disable();
+    this.error = undefined;
+    this.ordersService.createOrder(this.form.value.name)
+    .pipe(
+      finalize(() => this.form.enable()),
+    )
     .subscribe(
       order => this.store.dispatch(OrdersActions.orderCreated({ order })),
-      () => alert('order not created'),
+      error => this.error = 'Error: ' + error.error.message,
     );
   }
 

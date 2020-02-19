@@ -1,18 +1,17 @@
 <app-with-header-layout>
-  <div header class="header">
-    <mat-toolbar color="secondary">
-        <mat-toolbar-row class="navigation">
-            <nav mat-tab-nav-bar backgroundColor="secondary">
-                <a mat-tab-link routerLink="/settings/sku" routerLinkActive="active" #sku="routerLinkActive"
-                    [active]="sku.isActive">SKU</a>
-                <a mat-tab-link routerLink="/settings/location" routerLinkActive="active" #location="routerLinkActive"
-                    [active]="location.isActive">Location</a>
-            </nav>
-        </mat-toolbar-row>
-    </mat-toolbar>
+  <div header class="navigation">
+    <h2 class="mat-h2">Settings</h2>
+    <nav mat-tab-nav-bar backgroundColor="secondary">
+      <a mat-tab-link routerLink="/settings/sku" routerLinkActive="active" #sku="routerLinkActive"
+        [active]="sku.isActive">SKU</a>
+      <a mat-tab-link routerLink="/settings/location" routerLinkActive="active" #location="routerLinkActive"
+        [active]="location.isActive">Location</a>
+      <a mat-tab-link routerLink="/settings/user" routerLinkActive="active" #user="routerLinkActive"
+        [active]="user.isActive">User</a>
+    </nav>
+    <div class="right-padding"></div>
   </div>
 
   <router-outlet content></router-outlet>
 
 </app-with-header-layout>
-

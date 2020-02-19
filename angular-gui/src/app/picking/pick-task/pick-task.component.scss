@@ -2,13 +2,17 @@
 @include table-style();
 
 .header {
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1rem;
 
-  button {
-    height: 3rem;
+  .btn-back {
+    margin-right: 1rem;
   }
+}
+
+.actions {
+  width: 10rem;
 }

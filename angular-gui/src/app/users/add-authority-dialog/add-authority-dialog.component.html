@@ -1,0 +1,20 @@
+<h2 class="mat-h2" mat-dialog-title>Add authority</h2>
+<div mat-dialog-content>
+  <form [formGroup]="form" class="details-form">
+    <mat-form-field>
+      <mat-label>Choose authority</mat-label>
+      <mat-select formControlName="authority">
+        <mat-option *ngFor="let authority of authorities" [value]="authority">
+          {{ authority }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+  <mat-error *ngIf="error">{{error}}</mat-error>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" cdkFocusInitial>Cancel</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="form.value.authority" [disabled]="!form.valid">
+    Add
+  </button>
+</div>

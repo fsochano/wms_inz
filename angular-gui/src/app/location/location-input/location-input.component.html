@@ -1,25 +1,22 @@
 <form [formGroup]="form" class="details-form">
-        <mat-form-field>
-            <mat-label>Name</mat-label>
-            <input matInput type="text" formControlName="name">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Type</mat-label>
-            <mat-select formControlName="locationType">
-              <mat-option *ngFor="let type of locationTypes" [value]="type">
-                {{ type }}
-              </mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Capacity</mat-label>
-            <input matInput type="number" formControlName="capacity">
-        </mat-form-field>
-        <button mat-raised-button
-            color="primary"
-            (click)="createLocation()"
-            [disabled]="!form.valid">
-            Create
-        </button>
-    </form>
-    <mat-error *ngIf="error">{{error}}</mat-error>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput type="text" formControlName="name">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Type</mat-label>
+    <mat-select formControlName="locationType">
+      <mat-option *ngFor="let type of locationTypes" [value]="type">
+        {{ type }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Capacity</mat-label>
+    <input matInput type="number" formControlName="capacity">
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="createLocation()" [disabled]="!form.valid">
+    Create
+  </button>
+</form>
+<mat-error *ngIf="error">{{error}}</mat-error>

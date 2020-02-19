@@ -1,4 +1,4 @@
-package com.sochanski.pick;
+package com.sochanski.pick.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -55,8 +55,15 @@ public class PickTask extends Auditable {
 
     public PickTask(PickList pickList,
                     OrderLine orderLine,
-                    PickTaskStatus status,
-                    long qty) {
+                    long qty,
+                    Container fromContainer) {
+        this(pickList, orderLine, PickTaskStatus.READY, qty, fromContainer, null);
+    }
+
+    public PickTask(PickList pickList,
+                    OrderLine orderLine,
+                    long qty,
+                    PickTaskStatus status) {
         this(pickList, orderLine, status, qty, null, null);
     }
 

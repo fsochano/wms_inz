@@ -1,0 +1,49 @@
+<app-with-side-panel-layout>
+  <h2 class="mat-h2" header>Users</h2>
+
+  <mat-accordion sidenav class="side-nav">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Create User</mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-user-creation-form></app-user-creation-form>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <table mat-table content [dataSource]="users$ | async">
+    <app-simple-schema-column *ngFor="let column of columnSchema" [column]="column"></app-simple-schema-column>
+
+    <ng-container matColumnDef="authorities">
+      <th mat-header-cell *matHeaderCellDef> Authorities </th>
+      <td mat-cell *matCellDef="let user">
+        <mat-chip-list>
+          <mat-chip *ngFor="let authority of user.authorities" color="primary" selected
+            (removed)="removeAuthority(user, authority)">{{authority}}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="bt-actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let user" class="actions-cell">
+        <div class="actions">
+          <button mat-raised-button color="primary" (click)="addAuthority(user)">
+            Add Authority
+          </button>
+          <button mat-raised-button color="accent" (click)="changeUserPassword(user)">
+            Change password
+          </button>
+          <button mat-raised-button color="warn" (click)="removeUser(user)">
+            Remove
+          </button>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</app-with-side-panel-layout>

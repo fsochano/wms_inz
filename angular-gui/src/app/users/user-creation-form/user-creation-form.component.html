@@ -1,0 +1,18 @@
+<form [formGroup]="form" class="details-form">
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input matInput type="string" formControlName="username">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input matInput type="password" formControlName="password">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Repeat password</mat-label>
+    <input matInput type="password" formControlName="repeatPassword">
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="createUser()" [disabled]="!form.valid">
+    Create
+  </button>
+</form>
+<mat-error *ngIf="error">{{error}}</mat-error>

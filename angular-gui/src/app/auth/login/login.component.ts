@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { getRedirectPath } from '../../app-routing-helper';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -29,10 +30,13 @@ export class LoginComponent {
   }
 
   login() {
+    this.form.disable();
     this.error = undefined;
     const val = this.form.value;
     this.auth.login(val.email, val.password)
-      .subscribe(
+      .pipe(
+        finalize(() => this.form.enable()),
+      ).subscribe(
         user => {
           this.store.dispatch(AuthActions.login({ user }));
           this.navigate(user);

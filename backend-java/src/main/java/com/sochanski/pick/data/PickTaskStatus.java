@@ -1,4 +1,4 @@
-package com.sochanski.pick;
+package com.sochanski.pick.data;
 
 public enum PickTaskStatus {
     READY(1), PICKED(2), COMPLETED(3), SHIPPED(4);

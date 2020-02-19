@@ -1,6 +1,14 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url("~/assets/login-background.png");
+}
+
 .login-page {
-  max-width: 350px;
-  margin: 50px auto 0 auto;
+  width: 15rem;
 }
 
 .login-form {

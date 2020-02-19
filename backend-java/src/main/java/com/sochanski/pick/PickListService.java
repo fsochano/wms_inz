@@ -1,5 +1,9 @@
 package com.sochanski.pick;
 
+import com.sochanski.pick.data.PickList;
+import com.sochanski.pick.data.PickListStatus;
+import com.sochanski.pick.data.PickTask;
+import com.sochanski.pick.data.PickTaskStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,4 +53,5 @@ public class PickListService {
 
         return pickListRepository.save(pickList);
     }
+
 }

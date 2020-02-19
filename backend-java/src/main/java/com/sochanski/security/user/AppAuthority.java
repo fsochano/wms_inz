@@ -1,6 +1,7 @@
 package com.sochanski.security.user;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -10,24 +11,23 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "app_authority")
-@IdClass(AppAuthorityId.class)
+@EqualsAndHashCode(of = { "id" })
 public class AppAuthority implements GrantedAuthority {
 
-    @Id
-    @Column(nullable = false, updatable = false)
-    private String authority;
-    @Id
-    @JoinColumn(table = "app_user", name ="username", nullable = false, updatable = false, insertable = false)
-    private String username;
+    @EmbeddedId
+    private AppAuthorityId id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "username", nullable = false, updatable = false, insertable = false)
     private AppUser user;
 
     public AppAuthority(String authority, AppUser user) {
-        this.authority = authority;
-        this.username = user.getUsername();
+        this.id = new AppAuthorityId(user.getUsername(), authority);
         this.user = user;
     }
 
+    @Override
+    public String getAuthority() {
+        return getId().getAuthority();
+    }
 }

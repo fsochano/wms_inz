@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LocationService } from '../location.service';
 import { Store } from '@ngrx/store';
 import { LocationType } from '../store/location.model';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-location-input',
@@ -33,11 +34,14 @@ export class LocationInputComponent implements OnInit {
   }
 
   createLocation() {
+    this.form.disable();
     this.error = undefined;
     this.service.createLocation(this.form.value)
-      .subscribe(
+      .pipe(
+        finalize(() => this.form.enable()),
+      ).subscribe(
         location => this.store.dispatch(LocationsActions.locationCreated({ location })),
-        error => this.error = error.error.message
+        error => this.error = 'Error: ' + error.error.message,
       );
   }
 

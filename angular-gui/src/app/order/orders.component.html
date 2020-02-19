@@ -1,6 +1,5 @@
 <app-with-side-panel-layout>
-
-  <h1 header>Orders</h1>
+  <h2 header class="mat-h2">Orders</h2>
 
   <div sidenav class="side-nav">
     <mat-accordion>
@@ -14,12 +13,9 @@
   </div>
 
 
-  <table mat-table content [dataSource]="orders$ | async">
+  <table mat-table content [dataSource]="orders$ | async" [trackBy]="trackById">
 
-    <app-simple-schema-column
-      *ngFor="let column of columnSchema"
-      [column]="column"
-    ></app-simple-schema-column>
+    <app-simple-schema-column *ngFor="let column of columnSchema" [column]="column"></app-simple-schema-column>
 
     <ng-container matColumnDef="bt-actions">
       <th mat-header-cell *matHeaderCellDef> Actions </th>
@@ -27,7 +23,7 @@
         <button mat-raised-button color="primary" [routerLink]="['../order', order.id]" routerLinkActive="active">
           Details
         </button>
-        <button mat-raised-button (click)="removeOrder(order)" [disabled]="isDisabled(order)">
+        <button mat-raised-button color="warn" (click)="removeOrder(order)" [disabled]="isDisabled(order)">
           Remove
         </button>
       </td>

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SkuService } from '../sku.service';
 import { Store } from '@ngrx/store';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sku-input-data',
@@ -11,6 +12,7 @@ import { Store } from '@ngrx/store';
 })
 export class SkuInputDataComponent implements OnInit {
   form: FormGroup;
+  error?: string;
 
   constructor(
     fb: FormBuilder,
@@ -27,12 +29,17 @@ export class SkuInputDataComponent implements OnInit {
   }
 
   createSku() {
+    this.form.disable();
+    this.error = undefined;
     const val = this.form.value;
     this.service.createSku(val.name, val.description)
-    .subscribe(
-      sku => this.store.dispatch(SkusActions.skuCreated({ sku })),
-      () => alert('Sku not created'),
-    );
+      .pipe(
+        finalize(() => this.form.enable()),
+      )
+      .subscribe(
+        sku => this.store.dispatch(SkusActions.skuCreated({ sku })),
+        error => this.error = 'Error: ' + error.error.message,
+      );
   }
 
 }

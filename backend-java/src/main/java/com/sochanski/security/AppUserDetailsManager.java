@@ -17,9 +17,10 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.Set;
 
-import static java.util.Collections.emptyList;
+import static com.google.common.collect.Sets.newHashSet;
+import static java.util.Collections.emptySet;
 
 @Service
 public class AppUserDetailsManager implements UserDetailsManager, UserDetailsPasswordService {
@@ -39,19 +40,21 @@ public class AppUserDetailsManager implements UserDetailsManager, UserDetailsPas
     @Override
     public void createUser(UserDetails user) {
         AppUser appUser = new AppUser(user);
-        List<AppAuthority> authorities = appUser.getAuthorities();
-        appUser.setAuthorities(emptyList());
+        Set<AppAuthority> authorities = appUser.getAuthorities();
+        appUser.setAuthorities(emptySet());
         userRepository.save(appUser);
         authorityRepository.saveAll(authorities);
     }
 
+    @Transactional
     @Override
     public void updateUser(UserDetails user) {
-        AppUser appUser = new AppUser(user);
-        List<AppAuthority> authorities = appUser.getAuthorities();
-        appUser.setAuthorities(emptyList());
-        userRepository.save(appUser);
-        authorityRepository.saveAll(authorities);
+        AppUser oldDetails = loadUserByUsername(user.getUsername());
+        AppUser newDetails = new AppUser(user);
+
+        authorityRepository.deleteAll(oldDetails.getAuthorities());
+        authorityRepository.saveAll(newDetails.getAuthorities());
+        userRepository.save(newDetails);
     }
 
     @Override
@@ -97,6 +100,29 @@ public class AppUserDetailsManager implements UserDetailsManager, UserDetailsPas
         AppUser appUser = new AppUser(user);
         appUser.setPassword(passwordEncoder.encode(newPassword));
         return userRepository.save(appUser);
+    }
+
+    public AppUser addAuthority(UserDetails user, String authority) {
+        AppUser appUser = new AppUser(user);
+        AppAuthority newAuthority = new AppAuthority(authority, appUser);
+        if (!appUser.getAuthorities().contains(newAuthority)) {
+            var authorities = newHashSet(appUser.getAuthorities());
+            authorities.add(newAuthority);
+            appUser.setAuthorities(authorities);
+            updateUser(appUser);
+        }
+        return appUser;
+    }
+
+    public AppUser removeAuthority(UserDetails user, String authority) {
+        AppUser appUser = new AppUser(user);
+        AppAuthority appAuthority = new AppAuthority(authority, appUser);
+        var authorities = newHashSet(appUser.getAuthorities());
+        if (authorities.remove(appAuthority)) {
+            appUser.setAuthorities(authorities);
+            updateUser(appUser);
+        }
+        return appUser;
     }
 
 }

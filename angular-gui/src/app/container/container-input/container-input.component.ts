@@ -7,6 +7,7 @@ import { SkuService } from '../../sku/sku.service';
 import { Store } from '@ngrx/store';
 import { ContainersActions } from '../store/containers.actions';
 import { ContainerService } from '../container.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-container-input',
@@ -29,7 +30,7 @@ export class ContainerInputComponent implements OnInit {
     private containerService: ContainerService,
     skuService: SkuService,
     private store: Store<{}>
-    ) {
+  ) {
     this.form = fb.group({
       type: fb.control(null, [Validators.required]),
       containerSize: fb.control(null, [Validators.required, Validators.min(1)]),
@@ -44,13 +45,16 @@ export class ContainerInputComponent implements OnInit {
   }
 
   createContainer() {
+    this.form.disable();
     this.error = undefined;
     const { type, containerSize, skuId, skuQty, skuCapacity } = this.form.value;
     this.containerService.createContainer({ type, locationId: this.locationId, containerSize, skuId, skuQty, skuCapacity })
-    .subscribe(
-      container => this.store.dispatch(ContainersActions.containerCreated({ container })),
-      error => this.error = error.error.message
-    );
+      .pipe(
+        finalize(() => this.form.enable()),
+      ).subscribe(
+        container => this.store.dispatch(ContainersActions.containerCreated({ container })),
+        error => this.error = 'Error: ' + error.error.message
+      );
   }
 
 

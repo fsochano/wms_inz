@@ -2,7 +2,7 @@
   <div class="header">
     <mat-toolbar color="primary" *ngIf="isUserLogged$ | async">
       <mat-toolbar-row class="app-header">
-        <span class="header-message">Welcome {{ userName$ | async }}!</span>
+        <h1 class="mat-h1">Welcome {{ userName$ | async }}!</h1>
         <nav mat-tab-nav-bar backgroundColor="primary">
           <a
             *ngIf="showOrdering | async"

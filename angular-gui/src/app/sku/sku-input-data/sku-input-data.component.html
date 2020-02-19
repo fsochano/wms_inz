@@ -7,7 +7,6 @@
         <mat-label>Description</mat-label>
         <input matInput type="text" formControlName="description">
     </mat-form-field>
-    <span class="spacer"></span>
     <button mat-raised-button
         color="primary"
         (click)="createSku()"
@@ -15,3 +14,4 @@
         Create
     </button>
 </form>
+<mat-error *ngIf="error">{{error}}</mat-error>

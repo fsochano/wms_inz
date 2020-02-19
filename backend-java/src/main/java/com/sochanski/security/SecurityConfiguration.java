@@ -16,6 +16,7 @@
 package com.sochanski.security;
 
 import com.sochanski.security.user.AppAuthorityRepository;
+import com.sochanski.security.user.AppUser;
 import com.sochanski.security.user.AppUserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    public static final AppUser SYSTEM = new AppUser(
+            User.withUsername("SYSTEM")
+                    .password("{noop}no-password")
+                    .authorities("ORDERING", "PICKING", "SHIPPING", "SETTINGS")
+                    .disabled(true)
+                    .accountLocked(true)
+                    .credentialsExpired(true)
+                    .build());
+    static {
+        SYSTEM.setPassword(null);
+    }
 
     private final AppUserRepository appUserRepository;
     private final AppAuthorityRepository appAuthorityRepository;
@@ -62,8 +75,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        String password = passwordEncoder().encode("password");
-        AppUserDetailsManager userDetailsManager = userDetailsManager();
+        var password = passwordEncoder().encode("password");
+        var userDetailsManager = userDetailsManager();
 
         auth.userDetailsService(userDetailsManager)
                 .userDetailsPasswordManager(userDetailsManager)
@@ -110,7 +123,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    AppUserDetailsManager userDetailsManager() {
+    public AppUserDetailsManager userDetailsManager() {
         return new AppUserDetailsManager(appUserRepository, appAuthorityRepository, passwordEncoder());
     }
 
