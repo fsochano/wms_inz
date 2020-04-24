@@ -14,6 +14,7 @@ export class PickingComponent implements OnInit {
 
   columnSchema: ColumnSchema<PickList>[] = [
     { header: 'Id', key: 'id' },
+    { header:'Order Id', key:'orderId'},
     { header: 'Status', key: 'status' },
     { header: 'Last Change By', key: 'lastModifiedBy' },
     { header: 'Last Change Date', key: 'lastModifiedDate' },

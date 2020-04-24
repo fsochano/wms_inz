@@ -126,7 +126,7 @@ public class TestDataLoader implements CommandLineRunner {
         pickList = pickListRepository.save(new PickList(orderHeader, PickListStatus.COMPLETED));
         createPickTask(krynolinaReg1242, krynolinaShipdock01, krynolinaOL, pickList, PickTaskStatus.COMPLETED);
 
-        orderHeader = createOrderHeader("order-3", OrderHeaderStatus.SHIPPED);
+        orderHeader = createOrderHeader("order-4", OrderHeaderStatus.SHIPPED);
         OrderLine ponczochyOL = createOrderLine(ponczochySku, orderHeader, 50L);
 
         pickList = pickListRepository.save(new PickList(orderHeader, PickListStatus.SHIPPED));

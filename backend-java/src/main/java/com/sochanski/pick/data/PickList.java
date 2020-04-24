@@ -2,6 +2,7 @@ package com.sochanski.pick.data;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sochanski.db.Auditable;
 import com.sochanski.order.data.OrderHeader;
 import lombok.Data;
@@ -52,4 +53,9 @@ public class PickList extends Auditable {
         this.pickTasks = List.copyOf(pickTasks);
     }
 
+    @Transient
+    @JsonProperty
+    public Long getOrderId(){
+        return orderHeader.getId();
+    }
 }
