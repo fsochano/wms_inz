@@ -1,0 +1,7 @@
+spring:
+  h2:
+    console:
+      enabled: true
+application:
+  load-sql-constraints: false
+  java-processing: true

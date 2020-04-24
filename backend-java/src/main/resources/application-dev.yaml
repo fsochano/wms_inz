@@ -1,0 +1,15 @@
+jpa:
+  show-sql: false
+  generate-ddl: true
+  hibernate:
+    ddl-auto: create-drop
+
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: DEBUG
+
+application:
+  load-test-data: true
+  load-sql-data: false

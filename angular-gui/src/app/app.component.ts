@@ -1,3 +1,4 @@
+import { AuthService } from './auth/auth.service';
 import { AuthActions } from './auth/auth.action';
 import { AuthSelectors } from './auth/auth.selectror';
 import { Component, OnInit } from '@angular/core';
@@ -20,7 +21,8 @@ export class AppComponent implements OnInit {
   showSettings = this.store.select(AuthSelectors.hasAuthority, 'SETTINGS');
 
   constructor(
-    private store: Store<{}>
+    private store: Store<{}>,
+    private authService: AuthService,
   ) {
   }
 

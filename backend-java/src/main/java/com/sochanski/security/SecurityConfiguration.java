@@ -15,6 +15,7 @@
  */
 package com.sochanski.security;
 
+import com.sochanski.ApiUtils;
 import com.sochanski.security.user.AppAuthorityRepository;
 import com.sochanski.security.user.AppUser;
 import com.sochanski.security.user.AppUserRepository;
@@ -32,6 +33,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.servlet.http.HttpServletResponse;
+
+import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -45,6 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .accountLocked(true)
                     .credentialsExpired(true)
                     .build());
+
     static {
         SYSTEM.setPassword(null);
     }
@@ -64,13 +70,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/api/login").permitAll()
+                .antMatchers( ApiUtils.BASE_API_PATH+"/login").permitAll()
+                .antMatchers( ApiUtils.BASE_API_PATH+"/logout").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/actuator/health").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .logout().logoutUrl(ApiUtils.BASE_API_PATH+"/logout")
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> httpServletResponse.setStatus(SC_UNAUTHORIZED))
+                .permitAll();
     }
 
     @Override

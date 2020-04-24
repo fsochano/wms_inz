@@ -1,0 +1,48 @@
+version: "3.3"
+services:
+
+  wms-backend:
+    container_name: wms-backend
+    build:
+      context: ./backend-java
+    image: wms-backend
+    networks:
+      - inner-net
+    environment: 
+      SPRING_PROFILES_ACTIVE: local,dev
+
+      # SPRING_PROFILES_ACTIVE: oracle
+      # SPRING_DATASOURCE_URL: jdbc:oracle:thin:@localhost:1521:WMS
+      # SPRING_DATASOURCE_USERNAME: FISO
+      # SPRING_DATASOURCE_PASSWORD: asdf
+
+
+  wms-frontend:
+    container_name: wms-frontend
+    image: wms-frontend
+    build:
+      context: ./angular-gui
+    networks: 
+      - inner-net
+
+  # wms-database:
+  #   container_name: wms-database
+  #   image: oracle:latest
+  #   networks: 
+  #     - inner-net
+
+  wms-proxy:
+    container_name: wms-proxy
+    image: nginx:latest
+    networks:
+      - inner-net
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      # - ./nginx/error.log:/etc/nginx/error_log.log
+      # - ./nginx/cache/:/etc/nginx/cache
+      # - /etc/letsencrypt/:/etc/letsencrypt/
+
+networks:
+  inner-net:

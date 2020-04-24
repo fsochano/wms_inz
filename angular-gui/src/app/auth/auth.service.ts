@@ -12,4 +12,8 @@ export class AuthService {
   login(email: string, password: string): Observable<User> {
     return this.http.post<User>('/api/login', { username: email, password });
   }
+
+  logout(): Observable<unknown> {
+    return this.http.get<unknown>('/api/logout');
+  }
 }

@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+  datasource:
+    url: 'jdbc:oracle:thin:@localhost:1521:WMS'
+    username: FISO
+    password: asdf
+    driver-class-name: oracle.jdbc.OracleDriver
+    platform: oracle
+    initialization-mode: always
+    hikari:
+      connection-timeout: 60000
+      maximum-pool-size: 5
+application:
+  load-sql-constraints: true
+  java-processing: false
