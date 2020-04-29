@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { createEffect, ofType, OnInitEffects, Actions } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { AuthActions } from './auth.action';
-import { tap, switchMap } from 'rxjs/operators';
+import { tap, switchMap, catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -22,10 +22,14 @@ export class AuthEffects implements OnInitEffects {
     clear$ = createEffect(() =>
         this.actions$.pipe(
             ofType(AuthActions.logout),
-            switchMap(() => this.authService.logout()),
             tap(() => localStorage.removeItem('authState')),
+            switchMap(() => this.authService.logout()
+            .pipe(catchError(err => undefined))),
+
         ),
-        { dispatch: false, }
+        { dispatch: false,
+        useEffectsErrorHandler: true,
+        }
     );
 
     constructor(
