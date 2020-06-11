@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class PickTaskController {
 
-    private final PickTaskService service;
+    private final PickListService service;
 
-
-    public PickTaskController(PickTaskService service) {
+    public PickTaskController(PickListService service) {
         this.service = service;
     }
 

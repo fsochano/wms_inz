@@ -12,5 +12,5 @@ spring:
       connection-timeout: 60000
       maximum-pool-size: 5
 application:
-  load-sql-constraints: true
-  java-processing: false
+  load-sql-constraints: false
+  java-processing: true

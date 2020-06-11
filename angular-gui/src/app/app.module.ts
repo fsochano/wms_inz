@@ -18,7 +18,7 @@ import { SharedModule } from './shared/shared.module';
 import { ContainerModule } from './container/container.module';
 import { PickingModule } from './picking/picking.module';
 import { SettingsModule } from './settings/settings.module';
-import { ShippingModule } from './shipping/shipping.module';
+import { ShipmentModule } from './shipment/shipment.module';
 
 
 @NgModule({
@@ -32,7 +32,7 @@ import { ShippingModule } from './shipping/shipping.module';
     AuthModule,
     OrderModule,
     PickingModule,
-    ShippingModule,
+    ShipmentModule,
     SettingsModule,
     AppRoutingModule,
     StoreModule.forRoot({}),

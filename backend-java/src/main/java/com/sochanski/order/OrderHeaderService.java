@@ -54,6 +54,24 @@ public class OrderHeaderService {
         return header;
     }
 
+    public OrderHeader completeOrder(long id) {
+        return  orderHeaderRepository.findById(id)
+                .map(order -> {
+                    order.setStatus(OrderHeaderStatus.COMPLETED);
+                    return order;
+                }).map(orderHeaderRepository::save)
+                .orElseThrow(OrderHeaderNotFoundException::new);
+    }
+
+    public OrderHeader shipOrder(long id) {
+        return  orderHeaderRepository.findById(id)
+                .map(order -> {
+                    order.setStatus(OrderHeaderStatus.SHIPPED);
+                    return order;
+                }).map(orderHeaderRepository::save)
+                .orElseThrow(OrderHeaderNotFoundException::new);
+    }
+
     public OrderHeader updateOrder(long id, OrderHeaderUpdateParams params) {
         return orderHeaderRepository.findById(id)
                 .map(order -> {

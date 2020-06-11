@@ -3,6 +3,8 @@ package com.sochanski.container;
 import com.sochanski.location.Location;
 import com.sochanski.location.LocationNotFoundException;
 import com.sochanski.location.LocationRepository;
+import com.sochanski.pick.InsufficientQuantityException;
+import com.sochanski.pick.NotEnoughSpaceInContainerException;
 import com.sochanski.sku.Sku;
 import com.sochanski.sku.SkuNotFoundException;
 import com.sochanski.sku.SkuRepository;
@@ -55,5 +57,25 @@ public class ContainerService {
         }
 
         containerRepository.delete(container);
+    }
+
+    public void addStock(Container container, long quantity) {
+        long newSkuQuantity = container.getSkuQty() + quantity;
+        if(container.getSkuCapacity() < newSkuQuantity) {
+            throw new NotEnoughSpaceInContainerException();
+        }
+        container.setSkuQty(newSkuQuantity);
+        container.setFreeQty(0);
+        container.setAllocatedQty(container.getSkuQty());
+        containerRepository.save(container);
+    }
+
+    public void removeStock(Container container, long quantity) {
+        if(container.getSkuQty() < quantity) {
+            throw new InsufficientQuantityException();
+        }
+        container.setSkuQty(container.getSkuQty() - quantity);
+        container.setAllocatedQty(container.getAllocatedQty() - quantity);
+        containerRepository.save(container);
     }
 }

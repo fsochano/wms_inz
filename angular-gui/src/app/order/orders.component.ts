@@ -20,6 +20,7 @@ export class OrderComponent implements OnInit {
   user$: Observable<string> = this.store.select(AuthSelectors.userName);
 
   readonly columnSchema: ColumnSchema<Order>[] = [
+    { header: 'Order Id', key: 'id' },
     { header: 'Order Name', key: 'name' },
     { header: 'Order Status', key: 'status' },
     { header: 'Last Change By', key: 'lastModifiedBy' },

@@ -1,6 +1,12 @@
 version: "3.3"
 services:
 
+  # wms-database:
+  #   container_name: wms-database
+  #   image: oracle:latest
+  #   networks: 
+  #     - inner-net
+
   wms-backend:
     container_name: wms-backend
     build:
@@ -10,12 +16,11 @@ services:
       - inner-net
     environment: 
       SPRING_PROFILES_ACTIVE: local,dev
-
+     
       # SPRING_PROFILES_ACTIVE: oracle
-      # SPRING_DATASOURCE_URL: jdbc:oracle:thin:@localhost:1521:WMS
+      # SPRING_DATASOURCE_URL: jdbc:oracle:thin:@wms-database:1521:WMS
       # SPRING_DATASOURCE_USERNAME: FISO
       # SPRING_DATASOURCE_PASSWORD: asdf
-
 
   wms-frontend:
     container_name: wms-frontend
@@ -24,12 +29,6 @@ services:
       context: ./angular-gui
     networks: 
       - inner-net
-
-  # wms-database:
-  #   container_name: wms-database
-  #   image: oracle:latest
-  #   networks: 
-  #     - inner-net
 
   wms-proxy:
     container_name: wms-proxy

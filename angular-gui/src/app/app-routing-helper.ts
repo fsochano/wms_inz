@@ -9,7 +9,7 @@ export function getRedirectPath(authorities: Authority[]) {
     return '/picking';
   }
   if (authSet.has('SHIPPING')) {
-    return '/shipping';
+    return '/shipment';
   }
   if (authSet.has('SETTINGS')) {
     return '/settings';
