@@ -1,26 +1,28 @@
 version: "3.3"
 services:
 
-  # wms-database:
-  #   container_name: wms-database
-  #   image: oracle:latest
-  #   networks: 
-  #     - inner-net
+  wms-database:
+    container_name: wms-database
+    image: store/oracle/database-enterprise:12.2.0.1-slim
+    networks: 
+      - inner-net
+    ports:
+      - 1522:1521
 
   wms-backend:
     container_name: wms-backend
     build:
       context: ./backend-java
+    depends_on:
+      - wms-database
     image: wms-backend
     networks:
       - inner-net
-    environment: 
-      SPRING_PROFILES_ACTIVE: local,dev
-     
-      # SPRING_PROFILES_ACTIVE: oracle
-      # SPRING_DATASOURCE_URL: jdbc:oracle:thin:@wms-database:1521:WMS
-      # SPRING_DATASOURCE_USERNAME: FISO
-      # SPRING_DATASOURCE_PASSWORD: asdf
+    environment:    
+      SPRING_PROFILES_ACTIVE: oracle
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@wms-database:1521:ORCLCDB
+      SPRING_DATASOURCE_USERNAME: system
+      SPRING_DATASOURCE_PASSWORD: Oradoc_db1
 
   wms-frontend:
     container_name: wms-frontend
@@ -33,6 +35,9 @@ services:
   wms-proxy:
     container_name: wms-proxy
     image: nginx:latest
+    depends_on:
+      - wms-backend
+      - wms-frontend
     networks:
       - inner-net
     ports:
