@@ -2,6 +2,10 @@ package com.sochanski.processing.picks;
 
 import com.sochanski.container.Container;
 import com.sochanski.container.ContainerRepository;
+import com.sochanski.container.ContainerType;
+import com.sochanski.location.Location;
+import com.sochanski.location.LocationRepository;
+import com.sochanski.location.LocationType;
 import com.sochanski.order.OrderHeaderNotFoundException;
 import com.sochanski.order.OrderHeaderRepository;
 import com.sochanski.order.OrderLineRepository;
@@ -14,6 +18,8 @@ import lombok.Builder;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
+import java.util.Comparator;
+
 @Builder
 public class PicksGenerationTask extends TransactionCallbackWithoutResult {
 
@@ -24,19 +30,22 @@ public class PicksGenerationTask extends TransactionCallbackWithoutResult {
     private final PickListRepository pickListRepository;
     private final PickTaskRepository pickTaskRepository;
     private final ContainerRepository containerRepository;
+    private final LocationRepository locationRepository;
 
     private PicksGenerationTask(long orderHeaderId,
-                               OrderHeaderRepository orderHeaderRepository,
-                               OrderLineRepository orderLineRepository,
-                               PickListRepository pickListRepository,
-                               PickTaskRepository pickTaskRepository,
-                               ContainerRepository containerRepository) {
+                                OrderHeaderRepository orderHeaderRepository,
+                                OrderLineRepository orderLineRepository,
+                                PickListRepository pickListRepository,
+                                PickTaskRepository pickTaskRepository,
+                                ContainerRepository containerRepository,
+                                LocationRepository locationRepository) {
         this.orderHeaderId = orderHeaderId;
         this.orderHeaderRepository = orderHeaderRepository;
         this.orderLineRepository = orderLineRepository;
         this.pickListRepository = pickListRepository;
         this.pickTaskRepository = pickTaskRepository;
         this.containerRepository = containerRepository;
+        this.locationRepository = locationRepository;
     }
 
     @Override
@@ -49,26 +58,35 @@ public class PicksGenerationTask extends TransactionCallbackWithoutResult {
     }
 
     private void createPickTask(OrderLine ol, PickList pickList) {
-        var containers = containerRepository.findBySkuAndFreeQtyGreaterThan0OrderByFreeQtyAsc(ol.getSku());
         var qtyToFill = ol.getQty() - ol.getAllocated();
-        for (var container : containers) {
-            var allocatingQuantity = container.getSkuQty() - qtyToFill;
-            if (allocatingQuantity < 0) {
-                allocateQuantity(ol, pickList, container, allocatingQuantity);
-                qtyToFill -= allocatingQuantity;
+
+        var location = locationRepository.findAll()
+                .stream()
+                .filter(l -> LocationType.SHIPDOCK.equals(l.getLocationType()) && l.getFreeCapacity() > 0)
+                .min(Comparator.comparing(Location::getFreeCapacity))
+                .orElseThrow();
+
+        var toContainer = new Container(ContainerType.SHIPPING, location, 1, ol.getSku(), 0, qtyToFill);
+        containerRepository.save(toContainer);
+
+        var fromContainers = containerRepository.findBySkuAndFreeQtyGreaterThan0AndTypeEqualStorageOrderByFreeQtyAsc(ol.getSku());
+        for (var fromContainer : fromContainers) {
+            if (fromContainer.getSkuQty() < qtyToFill) {
+                allocateQuantity(ol, pickList, fromContainer, toContainer, fromContainer.getSkuQty());
+                qtyToFill -= fromContainer.getSkuQty();
             } else {
-                allocateQuantity(ol, pickList, container, qtyToFill);
+                allocateQuantity(ol, pickList, fromContainer, toContainer, qtyToFill);
                 break;
             }
         }
     }
 
-    private void allocateQuantity(OrderLine ol, PickList pickList, Container container, long allocatedQuantity) {
-        container.setAllocatedQty(container.getAllocatedQty() + allocatedQuantity);
-        container.setFreeQty(container.getSkuQty() - container.getAllocatedQty());
-        containerRepository.save(container);
+    private void allocateQuantity(OrderLine ol, PickList pickList, Container fromContainer, Container toContainer, long allocatedQuantity) {
+        fromContainer.setAllocatedQty(fromContainer.getAllocatedQty() + allocatedQuantity);
+        fromContainer.setFreeQty(fromContainer.getSkuQty() - fromContainer.getAllocatedQty());
+        containerRepository.save(fromContainer);
         ol.setAllocated(ol.getAllocated() + allocatedQuantity);
         orderLineRepository.save(ol);
-        pickTaskRepository.save(new PickTask(pickList, ol, allocatedQuantity, container));
+        pickTaskRepository.save(new PickTask(pickList, ol, allocatedQuantity, fromContainer, toContainer));
     }
 }

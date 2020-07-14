@@ -2,7 +2,7 @@ jpa:
   show-sql: false
   generate-ddl: true
   hibernate:
-    ddl-auto: create
+    ddl-auto: create-drop
 
 #logging:
 #  level:

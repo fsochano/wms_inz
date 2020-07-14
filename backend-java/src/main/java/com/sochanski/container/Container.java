@@ -47,7 +47,7 @@ public class Container extends Auditable {
     @PositiveOrZero
     private long freeQty;
 
-    public Container(ContainerType type, Location location, int containerSize, Sku sku, int skuQty, int skuCapacity){
+    public Container(ContainerType type, Location location, long containerSize, Sku sku, long skuQty, long skuCapacity){
         this.type = type;
         this.location = location;
         this.containerSize = containerSize;

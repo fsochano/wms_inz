@@ -56,8 +56,9 @@ public class PickTask extends Auditable {
     public PickTask(PickList pickList,
                     OrderLine orderLine,
                     long qty,
-                    Container fromContainer) {
-        this(pickList, orderLine, PickTaskStatus.READY, qty, fromContainer, null);
+                    Container fromContainer,
+                    Container toContainer) {
+        this(pickList, orderLine, PickTaskStatus.READY, qty, fromContainer, toContainer);
     }
 
     public PickTask(PickList pickList,
